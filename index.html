@@ -17,10 +17,10 @@ body{
   overflow-x:hidden;
 }
 #bg{position:fixed;inset:0;z-index:0;display:block}
-/* اگر آیکون‌هایت تیره باشند با کلاس زیر روشن می‌شوند */
-body.icon-invert .ic{filter:invert(1) brightness(1.6)}
 
-.ic{width:17px;height:17px;flex-shrink:0;display:block;object-fit:contain}
+/* ✅ همه‌ی آیکون‌ها اجباری سفید — مستقل از رنگ اصلی فایل svg */
+.ic{width:17px;height:17px;flex-shrink:0;display:block;object-fit:contain;
+  filter:brightness(0) invert(1)}
 
 .screen{display:none;position:relative;z-index:1;flex-direction:column;align-items:center;
   width:100%;max-width:440px;margin:0 auto;padding:14px 10px 24px}
@@ -92,8 +92,9 @@ body.icon-invert .ic{filter:invert(1) brightness(1.6)}
   border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:11px 14px;margin-top:9px;
   font-size:14px;animation:screenIn .35s both}
 .pdot{width:14px;height:14px;border-radius:50%;flex-shrink:0}
-.crown{margin-inline-start:auto;animation:crownF 2s ease-in-out infinite}
+.crown{margin-inline-start:auto;animation:crownF 2s ease-in-out infinite;display:flex}
 @keyframes crownF{50%{transform:translateY(-3px) rotate(9deg)}}
+.crownIc{width:18px;height:18px}
 .you{font-size:10.5px;background:rgba(90,162,255,.18);border:1px solid rgba(90,162,255,.5);
   color:#bcd9ff;padding:2px 9px;border-radius:20px;margin-inline-start:auto}
 .crown ~ .you,.you ~ .crown{margin-inline-start:6px}
@@ -148,15 +149,17 @@ body.icon-invert .ic{filter:invert(1) brightness(1.6)}
   background-size:250% 100%;animation:cardSheen 2.6s linear infinite;pointer-events:none}
 @keyframes cardSheen{from{background-position:130% 0}to{background-position:-130% 0}}
 
-/* ---- تاس ---- */
+/* ---- تاس ----
+   ✅ حلقه‌ی موج‌دار دور تاس حذف شد؛ به‌جایش هاله‌ی ثابت + پالس ملایم مقیاس */
 #diceBox{flex-shrink:0}
 #dice{width:clamp(92px,26vw,112px);cursor:pointer;padding:6px;position:relative;
   filter:drop-shadow(0 6px 12px rgba(0,0,0,.45));transition:transform .15s}
 #dice:active{transform:scale(.88)}
 #dice.disabled{opacity:.55;pointer-events:none}
-#dice.myRoll::after{content:'';position:absolute;inset:-1px;border-radius:24%;pointer-events:none;
-  border:2px solid rgba(160,200,255,.9);animation:pulseRing2 1.2s ease-out infinite}
-@keyframes pulseRing2{from{opacity:.9;transform:scale(.85)}to{opacity:0;transform:scale(1.3)}}
+#dice.myRoll{
+  filter:drop-shadow(0 6px 12px rgba(0,0,0,.45)) drop-shadow(0 0 13px rgba(255,255,255,.75));
+  animation:dicePulse 1.25s ease-in-out infinite}
+@keyframes dicePulse{50%{transform:scale(1.06)}}
 #dice.rolling{animation:shake .4s ease infinite}
 @keyframes shake{
   0%,100%{transform:rotate(0)}
@@ -178,13 +181,12 @@ body.icon-invert .ic{filter:invert(1) brightness(1.6)}
 @keyframes glowP{50%{transform:translateY(-3px) scale(1.08)}}
 .token.movable .selRing{opacity:1;animation:ringSpin 3.5s linear infinite}
 @keyframes ringSpin{to{transform:rotate(360deg)}}
-.spinR{animation:ringSpin 4s linear infinite}
 .twinkle{animation:tw 2.4s ease-in-out infinite}
 @keyframes tw{50%{opacity:.5}}
 svg .glowRect.on{animation:baseGlow 1.8s ease-in-out infinite}
 @keyframes baseGlow{50%{opacity:.7}}
 
-/* برنده — نور گردشی حذف شد */
+/* برنده — جام ایموجی می‌ماند */
 #winOverlay{position:fixed;inset:0;background:rgba(8,13,20,.7);z-index:10;
   display:flex;align-items:center;justify-content:center;
   opacity:0;pointer-events:none;transition:opacity .4s;
@@ -237,7 +239,7 @@ svg .glowRect.on{animation:baseGlow 1.8s ease-in-out infinite}
   </div>
   <div class="langRow">
     <button id="langBtn" class="langBtn">
-      <img class="ic" src="languages.svg" alt="">
+      <img class="ic" src="icons/languages.svg" alt="">
       <span id="langLbl"></span>
     </button>
   </div>
@@ -250,7 +252,7 @@ svg .glowRect.on{animation:baseGlow 1.8s ease-in-out infinite}
   <div class="codeBox" id="roomCodeBox">
     <div class="codeInner" id="roomCodeTxt"></div>
     <button class="copyChip" id="copyCodeBtn">
-      <img class="ic" src="copy.svg" alt=""><span id="copyCodeLbl" data-i18n="copy"></span>
+      <img class="ic" src="icons/copy.svg" alt=""><span id="copyCodeLbl" data-i18n="copy"></span>
     </button>
   </div>
   <div class="codeSub" data-i18n="codeHint"></div>
@@ -258,16 +260,16 @@ svg .glowRect.on{animation:baseGlow 1.8s ease-in-out infinite}
     <div style="font-size:13px;color:var(--sub)" data-i18n="players"></div>
     <div class="plist" id="plist"></div>
     <button class="btn green" id="startBtn">
-      <img class="ic" src="play.svg" alt=""><span id="startLbl"></span>
+      <img class="ic" src="icons/play.svg" alt=""><span id="startLbl"></span>
     </button>
     <button class="btn primary" id="inviteBtn">
-      <img class="ic" src="share.svg" alt=""><span data-i18n="invite"></span>
+      <img class="ic" src="icons/share.svg" alt=""><span data-i18n="invite"></span>
     </button>
     <button class="btn ghost" id="copyInviteBtn">
-      <img class="ic" src="copy.svg" alt=""><span id="copyLinkLbl" data-i18n="copyLink"></span>
+      <img class="ic" src="icons/copy.svg" alt=""><span id="copyLinkLbl" data-i18n="copyLink"></span>
     </button>
     <button class="btn ghost" id="leaveBtn">
-      <img class="ic" src="log-out.svg" alt=""><span data-i18n="leave"></span>
+      <img class="ic" src="icons/log-out.svg" alt=""><span data-i18n="leave"></span>
     </button>
   </div>
 </div>
@@ -285,10 +287,10 @@ svg .glowRect.on{animation:baseGlow 1.8s ease-in-out infinite}
     </div>
     <div id="guideBtns">
       <button id="muteBtn" class="miniBtn" title="sound">
-        <img class="ic" id="volIc" src="volume.svg" alt="">
+        <img class="ic" id="volIc" src="icons/volume.svg" alt="">
       </button>
       <button id="exitGameBtn" class="miniBtn" title="exit">
-        <img class="ic" src="log-out.svg" alt="">
+        <img class="ic" src="icons/log-out.svg" alt="">
       </button>
     </div>
   </div>
@@ -327,13 +329,13 @@ svg .glowRect.on{animation:baseGlow 1.8s ease-in-out infinite}
     <div class="winEmoji">🏆</div>
     <div id="winText"></div>
     <button id="againBtn">
-      <img class="ic" src="play.svg" alt=""><span data-i18n="again"></span>
+      <img class="ic" src="icons/play.svg" alt=""><span data-i18n="again"></span>
     </button>
     <button id="closeWinBtn" data-i18n="close"></button>
   </div>
 </div>
 
-<div id="connBadge" data-i18n="weak">⚠️ اتصال ضعیف — در تلاش برای اتصال...</div>
+<div id="connBadge" data-i18n="weak"></div>
 <div id="afkBadge"></div>
 
 <script>
@@ -343,7 +345,8 @@ svg .glowRect.on{animation:baseGlow 1.8s ease-in-out infinite}
 const WORKER_URL = 'https://ludo-proxy.qissy-pc.workers.dev';
 const BOT_USERNAME = 'PVP_Ludo_bot';
 const APP_SHORT    = 'ludo';
-const ICON_INVERT = false;   // اگر آیکون‌های svg تیره‌اند و دیده نمی‌شوند، true کن
+/* اگر پسوند فایل‌های صوتی‌ات mp3 نیست (مثلا ogg یا wav) همین‌جا عوض کن */
+const MUSIC = { win:'music/win.mp3', dice:'music/dio.mp3' };
 
 if (WORKER_URL.includes('YOUR-WORKER')) {
   document.getElementById('menuScreen').innerHTML =
@@ -584,7 +587,7 @@ let winSeen = false, pollTimer = null, failCount = 0;
 let diceLockUntil = 0;
 let lastRoomSig = '', lastTokSig = '', lastPlistSig = '';
 
-/* ============ صدا (WebAudio — بدون فایل) ============ */
+/* ============ صدا ============ */
 let actx = null, muted = localStorage.getItem('ludo_mute') === '1';
 function ac() {
   if (!actx) { try { actx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){} }
@@ -613,11 +616,9 @@ function noiseHit(d=.06, v=.12, when=0) {
 }
 const sfx = {
   click:  () => tone(320, .06, 'triangle', .12),
-  dice:   () => { for (let i = 0; i < 6; i++) noiseHit(.04, .08, i * .08); },
-  land:   () => { noiseHit(.05, .14); tone(190, .1, 'sine', .2); },
   step:   i  => tone(560 + i * 35, .05, 'sine', .09),
   capture:() => { tone(500, .28, 'sawtooth', .13, 0, -380); noiseHit(.15, .1, .05); },
-  /* فانفار پیروزی — آرپژ دو صدایی + آکورد پایانی */
+  /* فانفار رزرو — فقط اگر music/win.mp3 لود نشود پخش می‌شود */
   win:    () => {
     const seq = [
       [523.25, 0.00, .15], [659.26, .10, .15], [783.99, .20, .15],
@@ -633,22 +634,41 @@ const sfx = {
     noiseHit(.3, .05, 1.0);
   },
 };
-/* اگر فایل win.mp3 کنار HTML باشد، به‌جای فانفار لوپ می‌شود */
+/* صدای تاس: فایل music/dio — در نبودش سنتز قبلی */
+let dioAudio = null;
+function diceSynth() { for (let i = 0; i < 6; i++) noiseHit(.04, .08, i * .08); }
+function playDiceSfx() {
+  if (muted) return;
+  if (!dioAudio) {
+    try {
+      dioAudio = new Audio(MUSIC.dice); dioAudio.volume = .85;
+      dioAudio.addEventListener('error', () => { dioAudio = null; });
+    } catch (e) {}
+  }
+  if (dioAudio) {
+    try { dioAudio.currentTime = 0; } catch (e) {}
+    const p = dioAudio.play();
+    if (p && p.catch) p.catch(diceSynth);
+  } else diceSynth();
+}
+/* موسیقی پیروزی: فایل music/win — لوپ تا بسته شدن دیالوگ */
 let winAudio = null;
 function playWinMusic() {
   if (muted) return;
   if (!winAudio) {
-    try { winAudio = new Audio('win.mp3'); winAudio.loop = true; winAudio.volume = .5; }
-    catch(e) { winAudio = null; }
+    try {
+      winAudio = new Audio(MUSIC.win); winAudio.loop = true; winAudio.volume = .55;
+      winAudio.addEventListener('error', () => { winAudio = null; });
+    } catch (e) {}
   }
   if (winAudio) {
-    winAudio.currentTime = 0;
+    try { winAudio.currentTime = 0; } catch (e) {}
     const p = winAudio.play();
     if (p && p.catch) p.catch(() => sfx.win());
   } else sfx.win();
 }
-function stopWinMusic() { if (winAudio) { try { winAudio.pause(); } catch(e){} } }
-function setVolIcon() { $('volIc').src = muted ? 'volume-off.svg' : 'volume.svg'; }
+function stopWinMusic() { if (winAudio) { try { winAudio.pause(); } catch (e) {} } }
+function setVolIcon() { $('volIc').src = muted ? 'icons/volume-off.svg' : 'icons/volume.svg'; }
  $('muteBtn').addEventListener('click', () => {
   muted = !muted; localStorage.setItem('ludo_mute', muted ? '1' : '0');
   setVolIcon();
@@ -761,7 +781,7 @@ function starPath(cx, cy, R, r) {
   }
   return d + 'Z';
 }
-let glowEls = {}, ringsLayer = null, fxLayer = null;
+let glowEls = {}, fxLayer = null;
 
 function drawBoard() {
   svg.innerHTML = ''; glowEls = {};
@@ -834,7 +854,6 @@ function drawBoard() {
                              fill:'#fffdf4', stroke:'rgba(0,0,0,.18)'}));
     g.appendChild(el('rect',{x:x+36, y:y+36, width:168, height:168, rx:18,
                              fill:'rgba(255,255,255,.28)'}));
-    /* جایگاه مهره: سوکت روشن + حلقه‌ی خط‌چین — مهره کاملاً دیده می‌شود */
     o.anchors.forEach(a => {
       const cx = px(a[1]), cy = px(a[0]);
       g.appendChild(el('circle',{cx, cy, r:17, fill:'#f1e9d2', stroke:'rgba(0,0,0,.14)'}));
@@ -886,9 +905,7 @@ function drawBoard() {
   logo.textContent = 'LUDO';
   svg.appendChild(logo);
 
-  ringsLayer = el('g');
   fxLayer = el('g');
-  svg.appendChild(ringsLayer);
   svg.appendChild(fxLayer);
 }
 
@@ -992,20 +1009,6 @@ function burst(r, c, color) {
       ).onfinish = () => cir.remove();
     } catch(e) { setTimeout(() => cir.remove(), 550); }
   }
-}
-
-function clearRings() { if (ringsLayer) ringsLayer.innerHTML = ''; }
-function showRings(moves, color) {
-  clearRings();
-  const col = COLORS[color].main;
-  moves.forEach(m => {
-    const [r, c] = posOf(color, m.to, m.i);
-    const g = el('g');
-    g.appendChild(el('circle',{cx:px(c), cy:px(r), r:15, fill:col, opacity:.16}));
-    g.appendChild(el('circle',{class:'spinR', cx:px(c), cy:px(r), r:15, fill:'none',
-      stroke:col, 'stroke-width':2.5, 'stroke-dasharray':'6 7'}));
-    ringsLayer.appendChild(g);
-  });
 }
 
 /* ============ کارت بازیکن‌ها ============ */
@@ -1223,7 +1226,6 @@ function onRoomData(data) {
     const mv = g.lastMove;
     if (mv.by !== myId) {
       remoteBusy = true;
-      clearRings();
       ensureTokens();
       animateMove(mv.color, mv.i, mv.from, mv.to).then(() => {
         remoteBusy = false;
@@ -1285,7 +1287,7 @@ function cleanupDeparted() {
   return true;
 }
 
-/* لیست لابی فقط با تغییر واقعی بازسازی می‌شود → انیمیشن فقط یک‌بار */
+/* لیست لابی فقط با تغییر واقعی بازسازی می‌شود */
 function showLobby() {
   showScreen('lobby');
   $('roomCodeTxt').textContent = roomCode;
@@ -1300,7 +1302,7 @@ function showLobby() {
         <span class="pdot" style="background:${dot};box-shadow:0 0 8px ${dot}"></span>
         <span>${esc(p.name)}</span>
         ${uid === myId ? `<span class="you">${esc(t('you'))}</span>` : ''}
-        ${room.host === uid ? '<span class="crown">👑</span>' : ''}</div>`;
+        ${room.host === uid ? '<span class="crown"><img class="ic crownIc" src="icons/crown.svg" alt=""></span>' : ''}</div>`;
     }).join('');
   }
   const n = entries.length;
@@ -1314,7 +1316,6 @@ function showLobby() {
 /* ============ رندر بازی ============ */
 function clearHighlight() {
   document.querySelectorAll('.movable').forEach(e => e.classList.remove('movable'));
-  clearRings();
 }
 
 function renderGame() {
@@ -1363,7 +1364,6 @@ function renderGame() {
           phase = 'my-move';
           clearHighlight();
           legal.forEach(m => tokenEls[myColor][m.i].classList.add('movable'));
-          showRings(legal, myColor);
           hintEl.textContent = t('rolled', {n: g.dice});
         }
       }
@@ -1415,7 +1415,7 @@ diceEl.addEventListener('click', () => {
   hintEl.textContent = '';
   diceEl.classList.remove('myRoll');
   diceEl.classList.add('rolling', 'disabled');
-  sfx.dice();
+  playDiceSfx();
   let n = 0;
   const iv = setInterval(() => {
     setDice(1 + Math.floor(Math.random() * 6));
@@ -1424,7 +1424,6 @@ diceEl.addEventListener('click', () => {
       diceEl.classList.remove('rolling');
       const val = 1 + Math.floor(Math.random() * 6);
       setDice(val);
-      sfx.land();
       Promise.all([
         apiPatch(roomPath('game'), { dice: val }),
         touch(),
@@ -1556,39 +1555,53 @@ function tryCloseRoom(msg) {
   leaveToMenu(msg);
 }
 
-/* ============ برنده + کانفتی (یک‌باره، بدون بازتولید = بدون شلوغی) ============ */
+/* ============ برنده + کانفتی (بارش یکنواخت و مبتنی بر dt) ============ */
 const cCanvas = $('confetti'), cctx = cCanvas.getContext('2d');
-let confP = [], confRun = false, confEnd = 0;
 const CONF_COLORS = ['#e53935','#43a047','#fdd835','#1e88e5','#ff7ab6','#ffffff'];
+let confP = [], confRun = false, lastCf = 0, confElapsed = 0;
 function confResize() { cCanvas.width = innerWidth; cCanvas.height = innerHeight; }
 function startConfetti() {
   confResize();
-  const H = cCanvas.height;
-  confP = Array.from({length:130}, () => ({
-    x: Math.random() * cCanvas.width,
-    y: -20 - Math.random() * H * .6,
-    w: 6 + Math.random() * 6, h: 8 + Math.random() * 8,
-    c: CONF_COLORS[Math.floor(Math.random() * CONF_COLORS.length)],
-    vy: 1.8 + Math.random() * 1.4, vx: -.8 + Math.random() * 1.6,
-    rot: Math.random() * 7, vr: -.18 + Math.random() * .36,
-  }));
-  confRun = true; confEnd = performance.now() + 8000;
+  const W = cCanvas.width, H = cCanvas.height, N = 110;
+  confP = [];
+  for (let i = 0; i < N; i++) {
+    /* پخش یکنواخت روی ستون زمان ورود → تراکم از اول تا آخر یکسان */
+    const lane = (i + Math.random() * .7) / N;
+    confP.push({
+      x: Math.random() * W,
+      y: -30 - lane * H * .85,
+      w: 6 + Math.random() * 5, h: 9 + Math.random() * 6,
+      c: CONF_COLORS[i % CONF_COLORS.length],
+      vy: 2.1 + Math.random() * 1.1,          /* پراکندگی کم سرعت → بارش منسجم */
+      ph: Math.random() * 6.28,
+      sw: .6 + Math.random() * .9,            /* فرکانس موج افقی */
+      amp: .5 + Math.random() * .8,           /* دامنه موج افقی */
+      rot: Math.random() * 6.28,
+      vr: -.14 + Math.random() * .28,
+    });
+  }
+  confRun = true; lastCf = 0; confElapsed = 0;
   requestAnimationFrame(confTick);
 }
 function confTick(ts) {
   if (!confRun) return;
+  if (!lastCf) lastCf = ts;
+  const dt = Math.min((ts - lastCf) / 16.7, 2.5);  /* نرمال‌سازی با زمان واقعی */
+  lastCf = ts;
+  confElapsed += dt * 16.7;
   cctx.clearRect(0, 0, cCanvas.width, cCanvas.height);
   let alive = 0;
   for (const p of confP) {
-    if (p.y > cCanvas.height + 40) continue;   // خارج شد → حذف، بدون بازتولید
+    if (p.y > cCanvas.height + 40) continue;      /* خروج = حذف، بدون بازتولید */
     alive++;
-    p.vy = Math.min(p.vy + .02, 5.2);          // سقف سرعت
-    p.x += p.vx; p.y += p.vy; p.rot += p.vr;
+    p.y += p.vy * dt;
+    p.x += Math.sin(confElapsed / 1000 * p.sw + p.ph) * p.amp * dt;
+    p.rot += p.vr * dt;
     cctx.save(); cctx.translate(p.x, p.y); cctx.rotate(p.rot);
     cctx.fillStyle = p.c; cctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
     cctx.restore();
   }
-  if (alive > 0 && ts < confEnd) requestAnimationFrame(confTick);
+  if (alive > 0) requestAnimationFrame(confTick);
   else { confRun = false; cctx.clearRect(0, 0, cCanvas.width, cCanvas.height); }
 }
 function stopConfetti() { confRun = false; cctx.clearRect(0, 0, cCanvas.width, cCanvas.height); }
@@ -1624,11 +1637,10 @@ againBtn.addEventListener('click', async () => {
 closeWinBtn.addEventListener('click', () => {
   hap('light'); sfx.click();
   winSeen = true;
-  leaveToMenu();   // بستن دیالوگ = خروج از بازی به منو
+  leaveToMenu();
 });
 
 /* ============ شروع ============ */
-if (ICON_INVERT) document.body.classList.add('icon-invert');
 initBg();
 drawBoard();
 setDice(6);
