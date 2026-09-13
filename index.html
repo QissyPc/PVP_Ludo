@@ -17,6 +17,10 @@ body{
   overflow-x:hidden;
 }
 #bg{position:fixed;inset:0;z-index:0;display:block}
+/* اگر آیکون‌هایت تیره باشند با کلاس زیر روشن می‌شوند */
+body.icon-invert .ic{filter:invert(1) brightness(1.6)}
+
+.ic{width:17px;height:17px;flex-shrink:0;display:block;object-fit:contain}
 
 .screen{display:none;position:relative;z-index:1;flex-direction:column;align-items:center;
   width:100%;max-width:440px;margin:0 auto;padding:14px 10px 24px}
@@ -39,10 +43,17 @@ body{
 @keyframes hue{to{background-position:200% 0}}
 .tagline{color:var(--sub);font-size:13px}
 .cardHint{text-align:center;color:var(--sub);font-size:13px;margin-bottom:4px}
-.footHint{margin-top:18px;color:#5c7290;font-size:11.5px;letter-spacing:.5px}
+.langRow{margin-top:24px}
+.langBtn{display:inline-flex;align-items:center;gap:9px;background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.16);color:#dbe9f8;font-family:inherit;font-size:13.5px;
+  font-weight:bold;padding:11px 20px;border-radius:15px;cursor:pointer;transition:transform .15s}
+.langBtn:active{transform:scale(.94)}
+.langBtn .ic{width:18px;height:18px}
+.footHint{margin-top:16px;color:#5c7290;font-size:11.5px;letter-spacing:.5px}
 
 .btn{position:relative;overflow:hidden;font-family:inherit;border:none;border-radius:16px;
-  padding:14px 18px;font-size:15px;font-weight:bold;cursor:pointer;width:100%;margin-top:10px;
+  padding:13px 18px;font-size:15px;font-weight:bold;cursor:pointer;width:100%;margin-top:10px;
+  display:flex;align-items:center;justify-content:center;gap:9px;
   transition:transform .15s,box-shadow .3s,filter .3s}
 .btn:active{transform:translateY(1px) scale(.98)}
 .btn:disabled{opacity:.5;filter:saturate(.4);pointer-events:none}
@@ -73,7 +84,8 @@ body{
   cursor:pointer}
 .copyChip{border:none;border-radius:13px;background:rgba(90,162,255,.25);color:#cfe4ff;
   font-family:inherit;font-size:13px;font-weight:bold;padding:0 15px;cursor:pointer;
-  display:flex;align-items:center;gap:6px;transition:background .2s,transform .1s;flex-shrink:0}
+  display:flex;align-items:center;gap:6px;transition:transform .1s;flex-shrink:0}
+.copyChip .ic{width:15px;height:15px}
 .copyChip:active{transform:scale(.94)}
 .codeSub{text-align:center;font-size:11.5px;color:var(--sub);margin-top:7px}
 .prow{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.05);
@@ -104,13 +116,13 @@ body{
 #hint{color:#9db2c7;font-size:12px;margin-top:1px;min-height:16px;line-height:1.6}
 #guideBtns{display:flex;gap:8px;align-items:center}
 .miniBtn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);
-  color:#ffc9c0;border-radius:12px;width:38px;height:38px;font-size:16px;cursor:pointer;
-  flex-shrink:0;transition:transform .15s}
+  color:#ffc9c0;border-radius:12px;width:38px;height:38px;cursor:pointer;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;transition:transform .15s}
+.miniBtn .ic{width:19px;height:19px}
 .miniBtn:active{transform:scale(.88)}
 
 #bottomBar{direction:ltr;width:min(94vw,470px);display:flex;align-items:center;gap:12px;margin-top:12px}
 #leftPanel{direction:rtl;flex:1;min-width:0}
-/* ✅ نور کارت‌ها آزاد شد: padding داخل + margin منفی، تا سایه کلیپ نشود */
 #playerCards{display:flex;flex-direction:column;gap:7px;max-height:200px;overflow-y:auto;
   padding:10px;margin:-10px;scrollbar-width:thin}
 #playerCards::-webkit-scrollbar{width:4px}
@@ -136,7 +148,7 @@ body{
   background-size:250% 100%;animation:cardSheen 2.6s linear infinite;pointer-events:none}
 @keyframes cardSheen{from{background-position:130% 0}to{background-position:-130% 0}}
 
-/* ---- تاس (برگشت به SVG سبک) ---- */
+/* ---- تاس ---- */
 #diceBox{flex-shrink:0}
 #dice{width:clamp(92px,26vw,112px);cursor:pointer;padding:6px;position:relative;
   filter:drop-shadow(0 6px 12px rgba(0,0,0,.45));transition:transform .15s}
@@ -172,30 +184,28 @@ body{
 svg .glowRect.on{animation:baseGlow 1.8s ease-in-out infinite}
 @keyframes baseGlow{50%{opacity:.7}}
 
-/* برنده */
+/* برنده — نور گردشی حذف شد */
 #winOverlay{position:fixed;inset:0;background:rgba(8,13,20,.7);z-index:10;
   display:flex;align-items:center;justify-content:center;
   opacity:0;pointer-events:none;transition:opacity .4s;
   backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 #winOverlay.show{opacity:1;pointer-events:auto}
 #confetti{position:absolute;inset:0;pointer-events:none}
-.winCard{position:relative;overflow:hidden;text-align:center;
+.winCard{position:relative;text-align:center;
   background:linear-gradient(160deg,rgba(36,52,71,.94),rgba(16,24,35,.96));
   border:1px solid rgba(255,255,255,.16);padding:36px 48px;border-radius:26px;
   transform:scale(.6);transition:transform .45s cubic-bezier(.2,1.6,.4,1);
   box-shadow:0 26px 70px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.15)}
 #winOverlay.show .winCard{transform:scale(1)}
-.winCard::before{content:'';position:absolute;inset:-45%;pointer-events:none;
-  background:conic-gradient(from 0deg,transparent 0 14deg,rgba(255,209,102,.14) 14deg 22deg,transparent 22deg 36deg);
-  animation:ringSpin 9s linear infinite}
-.winEmoji{position:relative;font-size:60px;filter:drop-shadow(0 6px 14px rgba(255,200,60,.55));
+.winEmoji{font-size:60px;filter:drop-shadow(0 6px 14px rgba(255,200,60,.55));
   animation:bounce 1s ease infinite alternate}
 @keyframes bounce{to{transform:translateY(-12px)}}
-#winText{position:relative;font-size:19px;margin:14px 0 20px}
-#againBtn{position:relative;background:linear-gradient(140deg,#5aa2ff,#2b6fe0);color:#fff;border:none;
+#winText{font-size:19px;margin:14px 0 20px}
+#againBtn{background:linear-gradient(140deg,#5aa2ff,#2b6fe0);color:#fff;border:none;
   font-family:inherit;font-size:15px;font-weight:bold;padding:12px 32px;border-radius:15px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:9px;margin:0 auto;
   box-shadow:0 8px 22px rgba(43,111,224,.45)}
-#closeWinBtn{position:relative;background:rgba(255,255,255,.1);color:#cfe1f3;border:none;
+#closeWinBtn{background:rgba(255,255,255,.1);color:#cfe1f3;border:none;
   font-family:inherit;font-size:14px;padding:10px 24px;border-radius:13px;margin-top:10px;
   cursor:pointer;display:block;margin-inline:auto}
 
@@ -215,34 +225,50 @@ svg .glowRect.on{animation:baseGlow 1.8s ease-in-out infinite}
 <div id="menuScreen" class="screen active">
   <div class="logoArea">
     <div class="topbar gradText">LUDO</div>
-    <div class="tagline">مهره‌هات رو برسون خونه 🎲</div>
+    <div class="tagline" data-i18n="tagline"></div>
   </div>
   <div class="card">
-    <div class="cardHint">با دوستانت از هر جای تلگرام بازی کن (۲ تا ۴ نفره)</div>
-    <button class="btn primary" id="createBtn">➕ ساخت اتاق جدید</button>
+    <div class="cardHint" data-i18n="menuHint"></div>
+    <button class="btn primary" id="createBtn" data-i18n="create"></button>
     <div id="joinRow">
-      <input id="joinCode" placeholder="کد اتاق" maxlength="5" autocomplete="off">
-      <button class="btn ghost" id="joinBtn" style="width:auto;margin:0">ورود</button>
+      <input id="joinCode" data-i18n-ph="codePh" maxlength="5" autocomplete="off">
+      <button class="btn ghost" id="joinBtn" data-i18n="join" style="width:auto;margin:0"></button>
     </div>
   </div>
-  <div class="footHint">ساخته‌شده برای تلگرام • بدون نیاز به نصب</div>
+  <div class="langRow">
+    <button id="langBtn" class="langBtn">
+      <img class="ic" src="languages.svg" alt="">
+      <span id="langLbl"></span>
+    </button>
+  </div>
+  <div class="footHint" data-i18n="foot"></div>
 </div>
 
 <!-- لابی -->
 <div id="lobbyScreen" class="screen">
-  <div class="topbar" style="font-size:20px;letter-spacing:2px">اتاق بازی</div>
+  <div class="topbar" style="font-size:20px;letter-spacing:2px" data-i18n="lobbyTitle"></div>
   <div class="codeBox" id="roomCodeBox">
     <div class="codeInner" id="roomCodeTxt"></div>
-    <button class="copyChip" id="copyCodeBtn">📋 کپی</button>
+    <button class="copyChip" id="copyCodeBtn">
+      <img class="ic" src="copy.svg" alt=""><span id="copyCodeLbl" data-i18n="copy"></span>
+    </button>
   </div>
-  <div class="codeSub">با دکمه‌ی کپی، کد را برای دوستانت بفرست</div>
+  <div class="codeSub" data-i18n="codeHint"></div>
   <div class="card">
-    <div style="font-size:13px;color:var(--sub)">بازیکن‌ها</div>
+    <div style="font-size:13px;color:var(--sub)" data-i18n="players"></div>
     <div class="plist" id="plist"></div>
-    <button class="btn green" id="startBtn">▶️ شروع بازی</button>
-    <button class="btn primary" id="inviteBtn">📨 دعوت از طریق تلگرام</button>
-    <button class="btn ghost" id="copyInviteBtn">🔗 کپی لینک دعوت</button>
-    <button class="btn ghost" id="leaveBtn">خروج از اتاق</button>
+    <button class="btn green" id="startBtn">
+      <img class="ic" src="play.svg" alt=""><span id="startLbl"></span>
+    </button>
+    <button class="btn primary" id="inviteBtn">
+      <img class="ic" src="share.svg" alt=""><span data-i18n="invite"></span>
+    </button>
+    <button class="btn ghost" id="copyInviteBtn">
+      <img class="ic" src="copy.svg" alt=""><span id="copyLinkLbl" data-i18n="copyLink"></span>
+    </button>
+    <button class="btn ghost" id="leaveBtn">
+      <img class="ic" src="log-out.svg" alt=""><span data-i18n="leave"></span>
+    </button>
   </div>
 </div>
 
@@ -258,7 +284,12 @@ svg .glowRect.on{animation:baseGlow 1.8s ease-in-out infinite}
       <div id="hint"></div>
     </div>
     <div id="guideBtns">
-      <button id="exitGameBtn" class="miniBtn" title="خروج از بازی">🚪</button>
+      <button id="muteBtn" class="miniBtn" title="sound">
+        <img class="ic" id="volIc" src="volume.svg" alt="">
+      </button>
+      <button id="exitGameBtn" class="miniBtn" title="exit">
+        <img class="ic" src="log-out.svg" alt="">
+      </button>
     </div>
   </div>
 
@@ -295,25 +326,28 @@ svg .glowRect.on{animation:baseGlow 1.8s ease-in-out infinite}
   <div class="winCard">
     <div class="winEmoji">🏆</div>
     <div id="winText"></div>
-    <button id="againBtn">🔄 بازی دوباره</button>
-    <button id="closeWinBtn">بستن</button>
+    <button id="againBtn">
+      <img class="ic" src="play.svg" alt=""><span data-i18n="again"></span>
+    </button>
+    <button id="closeWinBtn" data-i18n="close"></button>
   </div>
 </div>
 
-<div id="connBadge">⚠️ اتصال ضعیف — در تلاش برای اتصال...</div>
+<div id="connBadge" data-i18n="weak">⚠️ اتصال ضعیف — در تلاش برای اتصال...</div>
 <div id="afkBadge"></div>
 
 <script>
 'use strict';
 
-/* ============ ۱) تنظیمات (بدون تغییر) ============ */
+/* ============ ۱) تنظیمات ============ */
 const WORKER_URL = 'https://ludo-proxy.qissy-pc.workers.dev';
 const BOT_USERNAME = 'PVP_Ludo_bot';
 const APP_SHORT    = 'ludo';
+const ICON_INVERT = false;   // اگر آیکون‌های svg تیره‌اند و دیده نمی‌شوند، true کن
 
 if (WORKER_URL.includes('YOUR-WORKER')) {
   document.getElementById('menuScreen').innerHTML =
-    '<div class="card" style="text-align:center;line-height:2">⚙️ آدرس سرور (WORKER_URL) هنوز تنظیم نشده است.</div>';
+    '<div class="card" style="text-align:center;line-height:2">⚙️ WORKER_URL تنظیم نشده است.</div>';
   throw new Error('WORKER_URL تنظیم نشده');
 }
 
@@ -322,11 +356,124 @@ tg.ready?.(); tg.expand?.();
 try{tg.setHeaderColor?.('#0a0f18');tg.setBackgroundColor?.('#0a0f18');}catch(e){}
 const tgUser     = tg.initDataUnsafe?.user;
 const myId       = String(tgUser?.id ?? 'g' + Math.floor(Math.random() * 1e9));
-const myName     = (tgUser?.first_name || 'مهمان').slice(0, 14);
+const myName     = (tgUser?.first_name || 'Guest').slice(0, 14);
 const startParam = tg.initDataUnsafe?.start_param;
 
 const hap  = t => { try{tg.HapticFeedback?.impactOccurred?.(t)}catch(e){} };
 const hapN = t => { try{tg.HapticFeedback?.notificationOccurred?.(t)}catch(e){} };
+
+/* ============ چندزبانه ============ */
+const I18N = {
+  fa: { dir:'rtl', langName:'فارسی',
+    tagline:'مهره‌هات رو برسون خونه',
+    menuHint:'با دوستانت از هر جای تلگرام بازی کن (۲ تا ۴ نفره)',
+    create:'ساخت اتاق جدید', codePh:'کد اتاق', join:'ورود',
+    foot:'ساخته‌شده برای تلگرام • بدون نیاز به نصب',
+    lobbyTitle:'اتاق بازی', codeHint:'با دکمه‌ی کپی، کد را برای دوستانت بفرست',
+    players:'بازیکن‌ها', start:'شروع بازی', startNeed:'حداقل ۲ نفر لازم است',
+    waitingHost:'منتظر میزبان...', invite:'دعوت از طریق تلگرام',
+    copyLink:'کپی لینک دعوت', leave:'خروج از اتاق',
+    copy:'کپی', copied:'کپی شد', you:'شما',
+    weak:'اتصال ضعیف — در تلاش برای اتصال...',
+    turnYou:'نوبت توست، {name}!', turnOther:'نوبت {name} است',
+    rollDice:'روی تاس بزن!', rolled:'تاس {n} آوردی — مهره انتخاب کن',
+    noMove:'حرکتی ممکن نیست...', commitDice:'در حال ثبت تاس...',
+    connLost:'اتصال قطع شد — دوباره تلاش کن', moveErr:'خطا در ثبت حرکت!',
+    eaten:'مهره‌ات خورده شد!', capture:'خوردی!',
+    afkPass:'نوبت بازیکن غایب رد شد', playerLeft:'یک بازیکن از بازی خارج شد',
+    roomClosed:'اتاق بسته شد',
+    lobbyClosedAfk:'اتاق به دلیل بی‌فعالیتی بسته شد',
+    gameClosedAfk:'بازی به دلیل بی‌فعالیتی بسته شد',
+    lobbyAfk:'کسی نیامده — اتاق تا {s} ثانیه دیگر بسته می‌شود',
+    gameAfk:'بازی متوقف شده — تا {s} ثانیه دیگر اتاق بسته می‌شود',
+    won:'{name} برنده شد!', again:'بازی دوباره', close:'بستن',
+    errCreate:'خطا در ساخت اتاق — اتصال اینترنت را بررسی کنید',
+    errCodeLen:'کد اتاق ۵ حرفی است', errConn:'خطا در اتصال به سرور',
+    errNoRoom:'اتاقی با این کد پیدا نشد!', errStarted:'این بازی شروع شده!',
+    errFull:'اتاق پر است!', errJoin:'خطا در ورود به اتاق',
+    confirmExit:'از بازی خارج می‌شوی؟ مهره‌هایت حذف خواهند شد.',
+    errStart:'خطا در شروع بازی',
+    inviteCopied:'لینک دعوت کپی شد:\n{link}',
+    shareText:'بیا LUDO بازی کنیم!',
+    colors:{red:'قرمز',green:'سبز',yellow:'زرد',blue:'آبی'} },
+  en: { dir:'ltr', langName:'English',
+    tagline:'Race your tokens home',
+    menuHint:'Play with friends anywhere on Telegram (2–4 players)',
+    create:'Create room', codePh:'Room code', join:'Join',
+    foot:'Built for Telegram • no install needed',
+    lobbyTitle:'Game room', codeHint:'Tap copy and send the code to your friends',
+    players:'Players', start:'Start game', startNeed:'Need at least 2 players',
+    waitingHost:'Waiting for host...', invite:'Invite via Telegram',
+    copyLink:'Copy invite link', leave:'Leave room',
+    copy:'Copy', copied:'Copied', you:'You',
+    weak:'Weak connection — reconnecting...',
+    turnYou:'Your turn, {name}!', turnOther:"{name}'s turn",
+    rollDice:'Tap the dice!', rolled:'You rolled {n} — pick a token',
+    noMove:'No possible moves...', commitDice:'Saving roll...',
+    connLost:'Connection lost — try again', moveErr:'Failed to save move!',
+    eaten:'Your token got captured!', capture:'Captured!',
+    afkPass:'Skipped absent player', playerLeft:'A player left the game',
+    roomClosed:'Room closed',
+    lobbyClosedAfk:'Room closed due to inactivity',
+    gameClosedAfk:'Game closed due to inactivity',
+    lobbyAfk:'Nobody joined — room closes in {s}s',
+    gameAfk:'Game paused — room closes in {s}s',
+    won:'{name} won!', again:'Play again', close:'Close',
+    errCreate:'Could not create the room — check your connection',
+    errCodeLen:'Room code is 5 characters', errConn:'Server connection error',
+    errNoRoom:'No room found with this code!', errStarted:'This game already started!',
+    errFull:'Room is full!', errJoin:'Failed to join room',
+    confirmExit:'Leave the game? Your tokens will be removed.',
+    errStart:'Failed to start game',
+    inviteCopied:'Invite link copied:\n{link}',
+    shareText:"Let's play LUDO!",
+    colors:{red:'Red',green:'Green',yellow:'Yellow',blue:'Blue'} },
+  ru: { dir:'ltr', langName:'Русский',
+    tagline:'Проведи свои фишки до дома',
+    menuHint:'Играй с друзьями в любом месте Telegram (2–4 игрока)',
+    create:'Создать комнату', codePh:'Код комнаты', join:'Войти',
+    foot:'Создано для Telegram • без установки',
+    lobbyTitle:'Комната', codeHint:'Нажми «копировать» и отправь код друзьям',
+    players:'Игроки', start:'Начать игру', startNeed:'Нужно минимум 2 игрока',
+    waitingHost:'Ждём хоста...', invite:'Пригласить через Telegram',
+    copyLink:'Копировать ссылку', leave:'Выйти из комнаты',
+    copy:'Копировать', copied:'Скопировано', you:'Вы',
+    weak:'Слабое соединение — переподключение...',
+    turnYou:'Твой ход, {name}!', turnOther:'Ход: {name}',
+    rollDice:'Нажми на кубик!', rolled:'Выпало {n} — выбери фишку',
+    noMove:'Нет доступных ходов...', commitDice:'Сохраняем бросок...',
+    connLost:'Соединение потеряно — попробуй снова', moveErr:'Ошибка сохранения хода!',
+    eaten:'Твою фишку съели!', capture:'Съел фишку!',
+    afkPass:'Ход отсутствующего пропущен', playerLeft:'Игрок покинул игру',
+    roomClosed:'Комната закрыта',
+    lobbyClosedAfk:'Комната закрыта из-за бездействия',
+    gameClosedAfk:'Игра закрыта из-за бездействия',
+    lobbyAfk:'Никого нет — комната закроется через {s} сек',
+    gameAfk:'Игра на паузе — комната закроется через {s} сек',
+    won:'{name} победил!', again:'Играть снова', close:'Закрыть',
+    errCreate:'Не удалось создать комнату — проверь интернет',
+    errCodeLen:'Код комнаты — 5 символов', errConn:'Ошибка соединения с сервером',
+    errNoRoom:'Комната с таким кодом не найдена!', errStarted:'Игра уже началась!',
+    errFull:'Комната заполнена!', errJoin:'Ошибка входа в комнату',
+    confirmExit:'Выйти из игры? Твои фишки будут удалены.',
+    errStart:'Ошибка запуска игры',
+    inviteCopied:'Ссылка скопирована:\n{link}',
+    shareText:'Играй со мной в LUDO!',
+    colors:{red:'Красный',green:'Зелёный',yellow:'Жёлтый',blue:'Синий'} },
+};
+const LANGS = ['fa','en','ru'];
+let lang = (() => {
+  const saved = localStorage.getItem('ludo_lang');
+  if (saved && I18N[saved]) return saved;
+  const lc = (tgUser?.language_code || '').slice(0,2).toLowerCase();
+  return LANGS.includes(lc) ? lc : 'fa';
+})();
+const t = (k, p) => {
+  let s = (I18N[lang] && I18N[lang][k]) ?? I18N.fa[k] ?? k;
+  if (p) for (const key in p) s = s.split('{'+key+'}').join(p[key]);
+  return s;
+};
+const colorName = c => I18N[lang].colors[c];
 
 /* ============ لایه اتصال (بدون تغییر) ============ */
 const dbUrl  = path => WORKER_URL + '/db/' + path + '.json';
@@ -397,7 +544,6 @@ const PATH = [
 ];
 const SAFE = [0,8,13,21,26,34,39,47];
 const COLOR_ORDER = ['red','green','yellow','blue'];
-const faName  = { red:'قرمز', green:'سبز', yellow:'زرد', blue:'آبی' };
 const ON_COLOR = { red:'#fff', green:'#fff', yellow:'#4a3900', blue:'#fff' };
 
 const AFK_PASS   = 25000;
@@ -437,6 +583,101 @@ let passTimer = null, passDiceVal = null;
 let winSeen = false, pollTimer = null, failCount = 0;
 let diceLockUntil = 0;
 let lastRoomSig = '', lastTokSig = '', lastPlistSig = '';
+
+/* ============ صدا (WebAudio — بدون فایل) ============ */
+let actx = null, muted = localStorage.getItem('ludo_mute') === '1';
+function ac() {
+  if (!actx) { try { actx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){} }
+  if (actx && actx.state === 'suspended') actx.resume();
+  return actx;
+}
+function tone(f, d, type='sine', v=.15, when=0, slide=0) {
+  const a = ac(); if (!a || muted) return;
+  const tt = a.currentTime + when;
+  const o = a.createOscillator(), g = a.createGain();
+  o.type = type; o.frequency.setValueAtTime(f, tt);
+  if (slide) o.frequency.exponentialRampToValueAtTime(Math.max(30, f + slide), tt + d);
+  g.gain.setValueAtTime(v, tt);
+  g.gain.exponentialRampToValueAtTime(.001, tt + d);
+  o.connect(g).connect(a.destination); o.start(tt); o.stop(tt + d + .02);
+}
+function noiseHit(d=.06, v=.12, when=0) {
+  const a = ac(); if (!a || muted) return;
+  const tt = a.currentTime + when;
+  const b = a.createBuffer(1, Math.max(1, a.sampleRate * d | 0), a.sampleRate);
+  const ch = b.getChannelData(0);
+  for (let i = 0; i < ch.length; i++) ch[i] = (Math.random()*2-1) * (1 - i/ch.length);
+  const s = a.createBufferSource(); s.buffer = b;
+  const g = a.createGain(); g.gain.value = v;
+  s.connect(g).connect(a.destination); s.start(tt);
+}
+const sfx = {
+  click:  () => tone(320, .06, 'triangle', .12),
+  dice:   () => { for (let i = 0; i < 6; i++) noiseHit(.04, .08, i * .08); },
+  land:   () => { noiseHit(.05, .14); tone(190, .1, 'sine', .2); },
+  step:   i  => tone(560 + i * 35, .05, 'sine', .09),
+  capture:() => { tone(500, .28, 'sawtooth', .13, 0, -380); noiseHit(.15, .1, .05); },
+  /* فانفار پیروزی — آرپژ دو صدایی + آکورد پایانی */
+  win:    () => {
+    const seq = [
+      [523.25, 0.00, .15], [659.26, .10, .15], [783.99, .20, .15],
+      [1046.50, .30, .34],
+      [783.99, .68, .12], [880.00, .80, .12],
+      [1046.50, .92, .60],
+    ];
+    seq.forEach(([f, w, d]) => {
+      tone(f, d, 'triangle', .16, w);
+      tone(f / 2, d, 'sine', .08, w);
+    });
+    [523.25, 659.26, 783.99, 1046.50].forEach(f => tone(f, 1.2, 'sine', .045, 1.0));
+    noiseHit(.3, .05, 1.0);
+  },
+};
+/* اگر فایل win.mp3 کنار HTML باشد، به‌جای فانفار لوپ می‌شود */
+let winAudio = null;
+function playWinMusic() {
+  if (muted) return;
+  if (!winAudio) {
+    try { winAudio = new Audio('win.mp3'); winAudio.loop = true; winAudio.volume = .5; }
+    catch(e) { winAudio = null; }
+  }
+  if (winAudio) {
+    winAudio.currentTime = 0;
+    const p = winAudio.play();
+    if (p && p.catch) p.catch(() => sfx.win());
+  } else sfx.win();
+}
+function stopWinMusic() { if (winAudio) { try { winAudio.pause(); } catch(e){} } }
+function setVolIcon() { $('volIc').src = muted ? 'volume-off.svg' : 'volume.svg'; }
+ $('muteBtn').addEventListener('click', () => {
+  muted = !muted; localStorage.setItem('ludo_mute', muted ? '1' : '0');
+  setVolIcon();
+  if (!muted) { ac(); sfx.click(); }
+});
+
+/* ============ زبان ============ */
+function applyI18n() {
+  document.documentElement.lang = lang;
+  document.documentElement.dir = I18N[lang].dir;
+  document.querySelectorAll('[data-i18n]').forEach(e => e.textContent = t(e.dataset.i18n));
+  document.querySelectorAll('[data-i18n-ph]').forEach(e => e.placeholder = t(e.dataset.i18nPh));
+  $('langLbl').textContent = I18N[lang].langName;
+  $('leftPanel').style.direction = I18N[lang].dir;
+  if (room && !room.started) {
+    lastPlistSig = '';
+    if ($('lobbyScreen').classList.contains('active')) showLobby();
+  }
+  lastRoomSig = '';
+}
+function setLang(l) {
+  if (!I18N[l] || l === lang) return;
+  lang = l; localStorage.setItem('ludo_lang', l);
+  applyI18n(); hap('light'); sfx.click();
+  if (roomCode) pollNow();
+}
+ $('langBtn').addEventListener('click', () => {
+  setLang(LANGS[(LANGS.indexOf(lang) + 1) % LANGS.length]);
+});
 
 /* ============ پس‌زمینه (سحابی pre-render + ۲۵fps) ============ */
 const bg = $('bg'), bctx = bg.getContext('2d');
@@ -479,14 +720,14 @@ function initBg() {
   renderNebula();
   requestAnimationFrame(drawBg);
 }
-function drawBg(t) {
+function drawBg(ts) {
   requestAnimationFrame(drawBg);
   if (document.hidden) return;
-  if (t - lastBgFrame < 40) return;
-  lastBgFrame = t;
+  if (ts - lastBgFrame < 40) return;
+  lastBgFrame = ts;
   bctx.clearRect(0, 0, bw, bh);
   bctx.drawImage(neb, 0, 0, bw, bh);
-  const s = t / 1000;
+  const s = ts / 1000;
   bctx.fillStyle = '#cfe4ff';
   for (const st of stars) {
     bctx.globalAlpha = .15 + .5 * Math.abs(Math.sin(s * st.sp + st.tw));
@@ -496,7 +737,7 @@ function drawBg(t) {
 }
 addEventListener('resize', () => { sizeBg(); if (confRun) confResize(); });
 
-/* ============ تاس SVG (حالت سبک قبلی) ============ */
+/* ============ تاس ============ */
 const PIP_MAP = {
   1:['p_c'], 2:['p_tl','p_br'], 3:['p_tl','p_c','p_br'],
   4:['p_tl','p_tr','p_bl','p_br'],
@@ -593,7 +834,7 @@ function drawBoard() {
                              fill:'#fffdf4', stroke:'rgba(0,0,0,.18)'}));
     g.appendChild(el('rect',{x:x+36, y:y+36, width:168, height:168, rx:18,
                              fill:'rgba(255,255,255,.28)'}));
-    /* ✅ جایگاه مهره: فقط سوکت روشن + حلقه‌ی خط‌چین نازک — مهره کاملاً دیده می‌شود */
+    /* جایگاه مهره: سوکت روشن + حلقه‌ی خط‌چین — مهره کاملاً دیده می‌شود */
     o.anchors.forEach(a => {
       const cx = px(a[1]), cy = px(a[0]);
       g.appendChild(el('circle',{cx, cy, r:17, fill:'#f1e9d2', stroke:'rgba(0,0,0,.14)'}));
@@ -651,7 +892,7 @@ function drawBoard() {
   svg.appendChild(fxLayer);
 }
 
-/* ============ مهره‌ها (✅ بزرگ‌تر با فاکتور مقیاس) ============ */
+/* ============ مهره‌ها ============ */
 const TOKEN_SCALE = 1.32;
 const tokenEls = {};
 function posOf(color, step, i) {
@@ -663,7 +904,6 @@ function posOf(color, step, i) {
 }
 function makeToken(color) {
   const g = el('g', {class:'token'});
-  /* گروه مقیاس: CSS هرگز به transform این گروه دست نمی‌زند */
   const sc = el('g', {transform:`scale(${TOKEN_SCALE})`});
   const sh = el('ellipse',{class:'tshadow', cx:0, cy:8, rx:12, ry:4.4, fill:'rgba(30,20,5,.3)'});
   const body = el('g', {class:'tbody'});
@@ -705,18 +945,18 @@ function renderTokens() {
     });
   const flat = [];
   let sig = '';
-  Object.keys(groups).sort().forEach(k => groups[k].forEach((t, j) => {
+  Object.keys(groups).sort().forEach(k => groups[k].forEach((tk, j) => {
     const off = groups[k].length > 1 ? (j - (groups[k].length - 1) / 2) * 11 : 0;
-    t.x = px(t.c) + off; t.y = px(t.r) + off;
-    sig += t.color + t.i + Math.round(t.x) + ',' + Math.round(t.y) + ';';
-    flat.push(t);
+    tk.x = px(tk.c) + off; tk.y = px(tk.r) + off;
+    sig += tk.color + tk.i + Math.round(tk.x) + ',' + Math.round(tk.y) + ';';
+    flat.push(tk);
   }));
   if (sig === lastTokSig) return;
   lastTokSig = sig;
   flat.sort((a, b) => a.r - b.r || a.c - b.c)
-      .forEach(t => {
-        const gEl = tokenEls[t.color][t.i];
-        gEl.style.transform = `translate(${t.x}px, ${t.y}px)`;
+      .forEach(tk => {
+        const gEl = tokenEls[tk.color][tk.i];
+        gEl.style.transform = `translate(${tk.x}px, ${tk.y}px)`;
         svg.insertBefore(gEl, fxLayer);
       });
 }
@@ -729,6 +969,7 @@ async function animateMove(color, i, from, to) {
     g.style.transform = `translate(${px(c)}px, ${px(r)}px)`;
     g.classList.remove('hop'); void g.getBoundingClientRect();
     g.classList.add('hop');
+    sfx.step(s - from);
     await sleep(190);
   }
   g.classList.remove('hop');
@@ -788,7 +1029,7 @@ function renderPlayerCards() {
     }
   }
   for (const c of order) {
-    cardEls[c].querySelector('.pname').textContent = names[c] || faName[c];
+    cardEls[c].querySelector('.pname').textContent = names[c] || colorName(c);
     const toks = state.tokens[c] || [-1,-1,-1,-1];
     cardEls[c].querySelector('.tdots').innerHTML = toks.map(s =>
       `<span class="tdot ${s === 56 ? 'home' : s === -1 ? '' : 'out'}" style="--tc:${COLORS[c].main}"></span>`
@@ -807,7 +1048,7 @@ function genCode() {
 }
 
  $('createBtn').addEventListener('click', async () => {
-  hap('light');
+  hap('light'); sfx.click();
   $('createBtn').disabled = true;
   try {
     const code = genCode();
@@ -817,25 +1058,25 @@ function genCode() {
     });
     openRoom(code);
     pollNow();
-  } catch (e) { alert('خطا در ساخت اتاق — اتصال اینترنت را بررسی کنید'); }
+  } catch (e) { alert(t('errCreate')); }
   $('createBtn').disabled = false;
 });
 
- $('joinBtn').addEventListener('click', () => { hap('light'); joinRoomByCode($('joinCode').value); });
+ $('joinBtn').addEventListener('click', () => { hap('light'); sfx.click(); joinRoomByCode($('joinCode').value); });
  $('joinCode').addEventListener('keydown', e => {
   if (e.key === 'Enter') joinRoomByCode($('joinCode').value);
 });
 
 async function joinRoomByCode(raw) {
   const code = (raw || '').trim().toUpperCase();
-  if (code.length !== 5) return alert('کد اتاق ۵ حرفی است');
+  if (code.length !== 5) return alert(t('errCodeLen'));
   let r;
   try { r = await apiGet('rooms/' + code); }
-  catch (e) { return alert('خطا در اتصال به سرور'); }
-  if (!r) return alert('اتاقی با این کد پیدا نشد!');
+  catch (e) { return alert(t('errConn')); }
+  if (!r) return alert(t('errNoRoom'));
   if (!r.players || !r.players[myId]) {
-    if (r.started) return alert('این بازی شروع شده!');
-    if (Object.keys(r.players || {}).length >= 4) return alert('اتاق پر است!');
+    if (r.started) return alert(t('errStarted'));
+    if (Object.keys(r.players || {}).length >= 4) return alert(t('errFull'));
     const used = Object.values(r.players || {}).map(p => p.color);
     const color = COLOR_ORDER.find(c => !used.includes(c));
     try {
@@ -843,7 +1084,7 @@ async function joinRoomByCode(raw) {
       await fetch(WORKER_URL + '/db/rooms/' + code + '.json', { method: 'PATCH',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ lastAct: Date.now() }) });
-    } catch (e) { return alert('خطا در ورود به اتاق'); }
+    } catch (e) { return alert(t('errJoin')); }
   }
   openRoom(code);
   pollNow();
@@ -887,15 +1128,17 @@ async function leaveToMenu(msg) {
     apiDel('rooms/' + roomCode + '/players/' + myId).catch(() => {});
   roomCode = null; room = null; myColor = null; phase = 'menu';
   afkBadge.style.display = 'none';
+  winOverlay.classList.remove('show');
   stopConfetti();
+  stopWinMusic();
   showScreen('menu');
   if (msg) alert(msg);
 }
- $('leaveBtn').addEventListener('click', () => { hap('light'); leaveToMenu(); });
+ $('leaveBtn').addEventListener('click', () => { hap('light'); sfx.click(); leaveToMenu(); });
 
  $('exitGameBtn').addEventListener('click', async () => {
   if (!roomCode || !room || !room.started) return leaveToMenu();
-  if (!confirm('از بازی خارج می‌شوی؟ مهره‌هایت حذف خواهند شد.')) return;
+  if (!confirm(t('confirmExit'))) return;
   try { await apiDel('rooms/' + roomCode + '/players/' + myId); } catch (e) {}
   leaveToMenu();
 });
@@ -905,28 +1148,29 @@ function inviteLink() {
   return `https://t.me/${BOT_USERNAME}/${APP_SHORT}?startapp=${roomCode}`;
 }
  $('inviteBtn').addEventListener('click', () => {
-  hap('light');
+  hap('light'); sfx.click();
   const link = inviteLink();
   if (tg.openTelegramLink) {
     tg.openTelegramLink('https://t.me/share/url?url=' + encodeURIComponent(link) +
-      '&text=' + encodeURIComponent('🎲 بیا LUDO بازی کنیم!'));
+      '&text=' + encodeURIComponent(t('shareText')));
   } else {
     navigator.clipboard?.writeText(link);
-    alert('لینک دعوت کپی شد:\n' + link);
+    alert(t('inviteCopied', {link}));
   }
 });
  $('copyInviteBtn').addEventListener('click', async () => {
   try { await navigator.clipboard.writeText(inviteLink()); } catch (e) {}
-  const b = $('copyInviteBtn');
-  b.textContent = '✓ کپی شد';
-  setTimeout(() => { b.textContent = '🔗 کپی لینک دعوت'; }, 1200);
+  sfx.click(); hap('light');
+  const s = $('copyLinkLbl');
+  s.textContent = t('copied');
+  setTimeout(() => { s.textContent = t('copyLink'); }, 1200);
 });
 async function copyRoomCode() {
   try { await navigator.clipboard.writeText(roomCode); } catch (e) {}
-  hap('light');
-  const c = $('copyCodeBtn');
-  c.innerHTML = '✓ کپی شد';
-  setTimeout(() => { c.innerHTML = '📋 کپی'; }, 1100);
+  sfx.click(); hap('light');
+  const s = $('copyCodeLbl');
+  s.textContent = t('copied');
+  setTimeout(() => { s.textContent = t('copy'); }, 1100);
 }
  $('copyCodeBtn').addEventListener('click', e => { e.stopPropagation(); copyRoomCode(); });
  $('roomCodeBox').addEventListener('click', copyRoomCode);
@@ -936,7 +1180,7 @@ async function copyRoomCode() {
   if (!room || room.host !== myId || room.started) return;
   const players = Object.values(room.players);
   if (players.length < 2) return;
-  hap('light');
+  hap('light'); sfx.click();
   const order = COLOR_ORDER.filter(c => players.some(p => p.color === c));
   const tokens = {};
   order.forEach(c => tokens[c] = [-1,-1,-1,-1]);
@@ -946,7 +1190,7 @@ async function copyRoomCode() {
       game: { turn: order[0], dice: null, order, tokens, lastMove: null, winner: null }
     });
     pollNow();
-  } catch (e) { alert('خطا در شروع بازی'); }
+  } catch (e) { alert(t('errStart')); }
 });
 
 /* ============ دریافت وضعیت اتاق ============ */
@@ -955,7 +1199,7 @@ function namesFromPlayers() {
 }
 
 function onRoomData(data) {
-  if (!data) return leaveToMenu('اتاق بسته شد');
+  if (!data) return leaveToMenu(t('roomClosed'));
   room = data;
   const me = (room.players || {})[myId];
   if (!me) return;
@@ -986,8 +1230,8 @@ function onRoomData(data) {
         if (mv.hit) {
           const [r, c] = posOf(mv.color, mv.to, mv.i);
           burst(r, c, mv.hitColor);
-          hap('medium');
-          if (mv.hitColor === myColor) hintEl.textContent = 'مهره‌ات خورده شد! 😵';
+          sfx.capture(); hap('medium');
+          if (mv.hitColor === myColor) hintEl.textContent = t('eaten');
         }
         renderTokens();
         lastRoomSig = '';
@@ -1031,23 +1275,23 @@ function cleanupDeparted() {
   if (!order.includes(g.turn)) { upd.turn = order[0]; upd.dice = null; }
   if (order.length === 1) upd.winner = order[0];
 
-  dead.forEach(c => (tokenEls[c] || []).forEach(t => t.remove()));
+  dead.forEach(c => (tokenEls[c] || []).forEach(tk => tk.remove()));
   dead.forEach(c => delete tokenEls[c]);
   lastTokSig = '';
   lastRoomSig = '';
 
-  hintEl.textContent = 'یک بازیکن از بازی خارج شد';
+  hintEl.textContent = t('playerLeft');
   apiPatch(roomPath('game'), upd).then(() => pollNow()).catch(() => {});
   return true;
 }
 
-/* ✅ لیست لابی فقط وقتی تغییر واقعی بوده بازسازی می‌شود → انیمیشن فقط یک‌بار */
+/* لیست لابی فقط با تغییر واقعی بازسازی می‌شود → انیمیشن فقط یک‌بار */
 function showLobby() {
   showScreen('lobby');
   $('roomCodeTxt').textContent = roomCode;
   const entries = Object.entries(room.players);
   const sig = entries.map(([u, p]) => u + ':' + p.color + ':' + p.name).join('|')
-              + '#' + room.host;
+              + '#' + room.host + '#' + lang;
   if (sig !== lastPlistSig) {
     lastPlistSig = sig;
     $('plist').innerHTML = entries.map(([uid, p]) => {
@@ -1055,16 +1299,16 @@ function showLobby() {
       return `<div class="prow">
         <span class="pdot" style="background:${dot};box-shadow:0 0 8px ${dot}"></span>
         <span>${esc(p.name)}</span>
-        ${uid === myId ? '<span class="you">شما</span>' : ''}
+        ${uid === myId ? `<span class="you">${esc(t('you'))}</span>` : ''}
         ${room.host === uid ? '<span class="crown">👑</span>' : ''}</div>`;
     }).join('');
   }
   const n = entries.length;
   const isHost = room.host === myId;
   $('startBtn').disabled = !isHost || n < 2;
-  $('startBtn').textContent = isHost
-    ? (n >= 2 ? '▶️ شروع بازی' : 'حداقل ۲ نفر لازم است')
-    : 'منتظر میزبان...';
+  $('startLbl').textContent = isHost
+    ? (n >= 2 ? t('start') : t('startNeed'))
+    : t('waitingHost');
 }
 
 /* ============ رندر بازی ============ */
@@ -1095,24 +1339,24 @@ function renderGame() {
 
   turnDot.style.background = turnDot.style.color = COLORS[g.turn].main;
   statusText.innerHTML = (g.turn === myColor)
-    ? `نوبت توست، <b style="color:${COLORS[myColor].lite}">${esc(myName)}</b>! 🎲`
-    : `نوبت <b style="color:${COLORS[g.turn].lite}">${esc(names[g.turn] || faName[g.turn])}</b> است`;
+    ? t('turnYou', {name: `<b style="color:${COLORS[myColor].lite}">${esc(myName)}</b>`})
+    : t('turnOther', {name: `<b style="color:${COLORS[g.turn].lite}">${esc(names[g.turn] || colorName(g.turn))}</b>`});
 
   if (g.turn === myColor) {
     if (g.dice == null) {
       if (diceLockUntil > Date.now()) {
         phase = 'wait';
-        hintEl.textContent = 'در حال ثبت تاس...';
+        hintEl.textContent = t('commitDice');
       } else {
         if (phase !== 'rolling') phase = 'my-roll';
-        hintEl.textContent = 'روی تاس بزن!';
+        hintEl.textContent = t('rollDice');
       }
     } else {
       if (phase !== 'my-move' && phase !== 'anim') {
         legal = computeLegal(myColor, g.dice);
         if (legal.length === 0) {
           phase = 'wait';
-          hintEl.textContent = 'حرکتی ممکن نیست...';
+          hintEl.textContent = t('noMove');
           clearHighlight();
           schedulePass(g.dice);
         } else {
@@ -1120,7 +1364,7 @@ function renderGame() {
           clearHighlight();
           legal.forEach(m => tokenEls[myColor][m.i].classList.add('movable'));
           showRings(legal, myColor);
-          hintEl.textContent = `تاس ${g.dice} آوردی — مهره انتخاب کن`;
+          hintEl.textContent = t('rolled', {n: g.dice});
         }
       }
     }
@@ -1161,7 +1405,7 @@ function schedulePass(diceVal) {
   }, 1300);
 }
 
-/* ============ انداختن تاس (منطق فیکس‌شده + ظاهر سبک قبلی) ============ */
+/* ============ انداختن تاس ============ */
 diceEl.addEventListener('click', () => {
   if (phase !== 'my-roll') return;
   if (Date.now() < diceLockUntil) return;
@@ -1171,6 +1415,7 @@ diceEl.addEventListener('click', () => {
   hintEl.textContent = '';
   diceEl.classList.remove('myRoll');
   diceEl.classList.add('rolling', 'disabled');
+  sfx.dice();
   let n = 0;
   const iv = setInterval(() => {
     setDice(1 + Math.floor(Math.random() * 6));
@@ -1179,6 +1424,7 @@ diceEl.addEventListener('click', () => {
       diceEl.classList.remove('rolling');
       const val = 1 + Math.floor(Math.random() * 6);
       setDice(val);
+      sfx.land();
       Promise.all([
         apiPatch(roomPath('game'), { dice: val }),
         touch(),
@@ -1191,7 +1437,7 @@ diceEl.addEventListener('click', () => {
         diceLockUntil = 0;
         diceEl.classList.remove('disabled');
         diceEl.classList.add('myRoll');
-        hintEl.textContent = 'اتصال قطع شد — دوباره تلاش کن';
+        hintEl.textContent = t('connLost');
       });
     }
   }, 85);
@@ -1234,8 +1480,8 @@ async function onTokenClick(color, i) {
   if (hit) {
     const [r, c] = posOf(color, to, i);
     burst(r, c, hitColor);
-    hap('medium');
-    hintEl.textContent = 'خوردی! 🎉';
+    sfx.capture(); hap('medium');
+    hintEl.textContent = t('capture');
   }
 
   const won = tokens[color].every(s => s === 56);
@@ -1253,7 +1499,7 @@ async function onTokenClick(color, i) {
     await apiPatch(roomPath('game'), upd);
     touch();
     pollNow();
-  } catch (e) { hintEl.textContent = 'خطا در ثبت حرکت!'; }
+  } catch (e) { hintEl.textContent = t('moveErr'); }
 }
 
 function nextTurn() {
@@ -1265,7 +1511,7 @@ function nextTurn() {
   ]);
 }
 
-/* ============ AFK (بدون تغییر) ============ */
+/* ============ AFK ============ */
 function afkCheck() {
   if (!room || !roomCode) return;
   const last = room.lastAct || room.createdAt || Date.now();
@@ -1273,17 +1519,17 @@ function afkCheck() {
   afkBadge.style.display = 'none';
 
   if (!room.started) {
-    if (stale > LOBBY_CLOSE) return tryCloseRoom('اتاق به دلیل بی‌فعالیتی بسته شد');
+    if (stale > LOBBY_CLOSE) return tryCloseRoom(t('lobbyClosedAfk'));
     if (stale > LOBBY_WARN)
-      showAfk(`کسی نیامده — اتاق تا ${Math.ceil((LOBBY_CLOSE - stale) / 1000)} ثانیه دیگر بسته می‌شود`);
+      showAfk(t('lobbyAfk', {s: Math.ceil((LOBBY_CLOSE - stale) / 1000)}));
     return;
   }
   const g = room.game;
   if (!g || g.winner) return;
 
-  if (stale > AFK_CLOSE) return tryCloseRoom('بازی به دلیل بی‌فعالیتی بسته شد');
+  if (stale > AFK_CLOSE) return tryCloseRoom(t('gameClosedAfk'));
   if (stale > AFK_WARN) {
-    showAfk(`بازی متوقف شده — تا ${Math.ceil((AFK_CLOSE - stale) / 1000)} ثانیه دیگر اتاق بسته می‌شود`);
+    showAfk(t('gameAfk', {s: Math.ceil((AFK_CLOSE - stale) / 1000)}));
     return;
   }
   if (g.turn !== myColor && stale > AFK_PASS) {
@@ -1293,12 +1539,12 @@ function afkCheck() {
         apiPatch(roomPath('game'), { turn: myColor, dice: null }),
         touch(),
       ]).then(() => pollNow()).catch(() => {});
-      hintEl.textContent = 'نوبت بازیکن غایب رد شد';
+      hintEl.textContent = t('afkPass');
     }
   }
 }
-function showAfk(t) {
-  afkBadge.textContent = '⏳ ' + t;
+function showAfk(txt) {
+  afkBadge.textContent = txt;
   afkBadge.style.display = 'block';
 }
 function tryCloseRoom(msg) {
@@ -1310,35 +1556,39 @@ function tryCloseRoom(msg) {
   leaveToMenu(msg);
 }
 
-/* ============ برنده + کانفتی ============ */
+/* ============ برنده + کانفتی (یک‌باره، بدون بازتولید = بدون شلوغی) ============ */
 const cCanvas = $('confetti'), cctx = cCanvas.getContext('2d');
 let confP = [], confRun = false, confEnd = 0;
+const CONF_COLORS = ['#e53935','#43a047','#fdd835','#1e88e5','#ff7ab6','#ffffff'];
 function confResize() { cCanvas.width = innerWidth; cCanvas.height = innerHeight; }
 function startConfetti() {
   confResize();
-  confP = Array.from({length:150}, () => ({
-    x: Math.random() * cCanvas.width, y: -20 - Math.random() * cCanvas.height * .5,
+  const H = cCanvas.height;
+  confP = Array.from({length:130}, () => ({
+    x: Math.random() * cCanvas.width,
+    y: -20 - Math.random() * H * .6,
     w: 6 + Math.random() * 6, h: 8 + Math.random() * 8,
-    c: ['#e53935','#43a047','#fdd835','#1e88e5','#ff7ab6','#fff'][Math.floor(Math.random()*6)],
-    vy: 2 + Math.random() * 3, vx: -1 + Math.random() * 2,
-    rot: Math.random() * 7, vr: -.2 + Math.random() * .4,
+    c: CONF_COLORS[Math.floor(Math.random() * CONF_COLORS.length)],
+    vy: 1.8 + Math.random() * 1.4, vx: -.8 + Math.random() * 1.6,
+    rot: Math.random() * 7, vr: -.18 + Math.random() * .36,
   }));
-  confRun = true; confEnd = performance.now() + 5000;
+  confRun = true; confEnd = performance.now() + 8000;
   requestAnimationFrame(confTick);
 }
-function confTick(t) {
+function confTick(ts) {
   if (!confRun) return;
   cctx.clearRect(0, 0, cCanvas.width, cCanvas.height);
+  let alive = 0;
   for (const p of confP) {
-    p.x += p.vx; p.y += p.vy; p.vy += .03; p.rot += p.vr;
+    if (p.y > cCanvas.height + 40) continue;   // خارج شد → حذف، بدون بازتولید
+    alive++;
+    p.vy = Math.min(p.vy + .02, 5.2);          // سقف سرعت
+    p.x += p.vx; p.y += p.vy; p.rot += p.vr;
     cctx.save(); cctx.translate(p.x, p.y); cctx.rotate(p.rot);
     cctx.fillStyle = p.c; cctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
     cctx.restore();
-    if (p.y > cCanvas.height + 30 && t < confEnd) {
-      p.y = -20; p.x = Math.random() * cCanvas.width; p.vy = 2 + Math.random() * 3;
-    }
   }
-  if (t < confEnd) requestAnimationFrame(confTick);
+  if (alive > 0 && ts < confEnd) requestAnimationFrame(confTick);
   else { confRun = false; cctx.clearRect(0, 0, cCanvas.width, cCanvas.height); }
 }
 function stopConfetti() { confRun = false; cctx.clearRect(0, 0, cCanvas.width, cCanvas.height); }
@@ -1346,14 +1596,16 @@ function stopConfetti() { confRun = false; cctx.clearRect(0, 0, cCanvas.width, c
 function showWin(color) {
   phase = 'over';
   winText.innerHTML =
-    `<b style="color:${COLORS[color].lite}">${esc(names[color] || faName[color])}</b> برنده شد! 🎉`;
+    t('won', {name: `<b style="color:${COLORS[color].lite}">${esc(names[color] || colorName(color))}</b>`});
   againBtn.style.display = room.host === myId ? '' : 'none';
   winOverlay.classList.add('show');
   startConfetti();
+  playWinMusic();
   hapN('success');
 }
 againBtn.addEventListener('click', async () => {
-  hap('light');
+  hap('light'); sfx.click();
+  stopWinMusic();
   const order = room.game.order, tokens = {};
   order.forEach(c => tokens[c] = [-1,-1,-1,-1]);
   try {
@@ -1370,16 +1622,18 @@ againBtn.addEventListener('click', async () => {
   } catch (e) {}
 });
 closeWinBtn.addEventListener('click', () => {
-  hap('light');
+  hap('light'); sfx.click();
   winSeen = true;
-  winOverlay.classList.remove('show');
-  stopConfetti();
+  leaveToMenu();   // بستن دیالوگ = خروج از بازی به منو
 });
 
 /* ============ شروع ============ */
+if (ICON_INVERT) document.body.classList.add('icon-invert');
 initBg();
 drawBoard();
 setDice(6);
+applyI18n();
+setVolIcon();
 showScreen('menu');
 if (startParam) joinRoomByCode(startParam);
 </script>
