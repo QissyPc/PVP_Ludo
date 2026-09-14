@@ -17,8 +17,6 @@ body{
   overflow-x:hidden;
 }
 #bg{position:fixed;inset:0;z-index:0;display:block}
-
-/* ✅ همه‌ی آیکون‌ها اجباری سفید — مستقل از رنگ اصلی فایل svg */
 .ic{width:17px;height:17px;flex-shrink:0;display:block;object-fit:contain;
   filter:brightness(0) invert(1)}
 
@@ -149,8 +147,7 @@ body{
   background-size:250% 100%;animation:cardSheen 2.6s linear infinite;pointer-events:none}
 @keyframes cardSheen{from{background-position:130% 0}to{background-position:-130% 0}}
 
-/* ---- تاس ----
-   ✅ حلقه‌ی موج‌دار دور تاس حذف شد؛ به‌جایش هاله‌ی ثابت + پالس ملایم مقیاس */
+/* ---- تاس ---- */
 #diceBox{flex-shrink:0}
 #dice{width:clamp(92px,26vw,112px);cursor:pointer;padding:6px;position:relative;
   filter:drop-shadow(0 6px 12px rgba(0,0,0,.45));transition:transform .15s}
@@ -186,7 +183,7 @@ body{
 svg .glowRect.on{animation:baseGlow 1.8s ease-in-out infinite}
 @keyframes baseGlow{50%{opacity:.7}}
 
-/* برنده — جام ایموجی می‌ماند */
+/* برنده */
 #winOverlay{position:fixed;inset:0;background:rgba(8,13,20,.7);z-index:10;
   display:flex;align-items:center;justify-content:center;
   opacity:0;pointer-events:none;transition:opacity .4s;
@@ -345,14 +342,7 @@ svg .glowRect.on{animation:baseGlow 1.8s ease-in-out infinite}
 const WORKER_URL = 'https://ludo-proxy.qissy-pc.workers.dev';
 const BOT_USERNAME = 'PVP_Ludo_bot';
 const APP_SHORT    = 'ludo';
-/* اگر پسوند فایل‌های صوتی‌ات mp3 نیست (مثلا ogg یا wav) همین‌جا عوض کن */
 const MUSIC = { win:'music/win.mp3', dice:'music/dio.mp3' };
-
-if (WORKER_URL.includes('YOUR-WORKER')) {
-  document.getElementById('menuScreen').innerHTML =
-    '<div class="card" style="text-align:center;line-height:2">⚙️ WORKER_URL تنظیم نشده است.</div>';
-  throw new Error('WORKER_URL تنظیم نشده');
-}
 
 const tg = window.Telegram?.WebApp ?? {};
 tg.ready?.(); tg.expand?.();
@@ -364,6 +354,24 @@ const startParam = tg.initDataUnsafe?.start_param;
 
 const hap  = t => { try{tg.HapticFeedback?.impactOccurred?.(t)}catch(e){} };
 const hapN = t => { try{tg.HapticFeedback?.notificationOccurred?.(t)}catch(e){} };
+
+/* ============ لایه API جدید (Worker v2) ============ */
+const INIT_DATA = tg.initData || '';
+const API = WORKER_URL + '/api';
+async function req(method, path, body) {
+  const r = await fetch(API + path, { method,
+    headers: {'Content-Type':'application/json','X-Init-Data':INIT_DATA},
+    body: body ? JSON.stringify(body) : undefined });
+  if (r.status === 429 || r.status === 503) {
+    const retry = +(r.headers.get('Retry-After') || 5);
+    const e = new Error('busy'); e.busy = true; e.retry = retry; throw e;
+  }
+  if (!r.ok) {
+    let api = 'http'; try { api = (await r.json()).error || api; } catch(_){}
+    const e = new Error(api); e.api = api; throw e;
+  }
+  return r.json();
+}
 
 /* ============ چندزبانه ============ */
 const I18N = {
@@ -390,6 +398,10 @@ const I18N = {
     lobbyAfk:'کسی نیامده — اتاق تا {s} ثانیه دیگر بسته می‌شود',
     gameAfk:'بازی متوقف شده — تا {s} ثانیه دیگر اتاق بسته می‌شود',
     won:'{name} برنده شد!', again:'بازی دوباره', close:'بستن',
+    busy:'سرور شلوغ است — چند لحظه صبر کن…',
+    errIllegal:'این حرکت مجاز نیست',
+    banned:'دسترسی‌ات محدود شده',
+    maintenance:'بازی در حال نگهداری است — بعداً برگرد',
     errCreate:'خطا در ساخت اتاق — اتصال اینترنت را بررسی کنید',
     errCodeLen:'کد اتاق ۵ حرفی است', errConn:'خطا در اتصال به سرور',
     errNoRoom:'اتاقی با این کد پیدا نشد!', errStarted:'این بازی شروع شده!',
@@ -422,6 +434,10 @@ const I18N = {
     lobbyAfk:'Nobody joined — room closes in {s}s',
     gameAfk:'Game paused — room closes in {s}s',
     won:'{name} won!', again:'Play again', close:'Close',
+    busy:'Server busy — hang on…',
+    errIllegal:'Illegal move',
+    banned:'Access restricted',
+    maintenance:'Under maintenance — come back later',
     errCreate:'Could not create the room — check your connection',
     errCodeLen:'Room code is 5 characters', errConn:'Server connection error',
     errNoRoom:'No room found with this code!', errStarted:'This game already started!',
@@ -454,6 +470,10 @@ const I18N = {
     lobbyAfk:'Никого нет — комната закроется через {s} сек',
     gameAfk:'Игра на паузе — комната закроется через {s} сек',
     won:'{name} победил!', again:'Играть снова', close:'Закрыть',
+    busy:'Сервер перегружен — секунду…',
+    errIllegal:'Недопустимый ход',
+    banned:'Доступ ограничен',
+    maintenance:'Техобслуживание — зайди позже',
     errCreate:'Не удалось создать комнату — проверь интернет',
     errCodeLen:'Код комнаты — 5 символов', errConn:'Ошибка соединения с сервером',
     errNoRoom:'Комната с таким кодом не найдена!', errStarted:'Игра уже началась!',
@@ -478,37 +498,7 @@ const t = (k, p) => {
 };
 const colorName = c => I18N[lang].colors[c];
 
-/* ============ لایه اتصال (بدون تغییر) ============ */
-const dbUrl  = path => WORKER_URL + '/db/' + path + '.json';
-const roomPath = p => 'rooms/' + roomCode + (p ? '/' + p : '');
-const touch = () => roomCode
-  ? apiPatch(roomPath(''), { lastAct: Date.now() }).catch(() => {})
-  : Promise.resolve();
-
-async function apiGet(path) {
-  const r = await fetch(dbUrl(path), { cache: 'no-store' });
-  if (!r.ok) throw new Error('http ' + r.status);
-  return r.json();
-}
-async function apiPut(path, val) {
-  const r = await fetch(dbUrl(path), { method: 'PUT',
-    headers: {'Content-Type': 'application/json'}, body: JSON.stringify(val) });
-  if (!r.ok) throw new Error('http ' + r.status);
-  return r.json();
-}
-async function apiPatch(path, val) {
-  const r = await fetch(dbUrl(path), { method: 'PATCH',
-    headers: {'Content-Type': 'application/json'}, body: JSON.stringify(val) });
-  if (!r.ok) throw new Error('http ' + r.status);
-  return r.json();
-}
-async function apiDel(path) {
-  const r = await fetch(dbUrl(path), { method: 'DELETE' });
-  if (!r.ok) throw new Error('http ' + r.status);
-  return r.json();
-}
-
-/* ============ ثابت‌های بازی (بدون تغییر) ============ */
+/* ============ ثابت‌های بازی ============ */
 const CELL = 40;
 const px = v => v * CELL + 20;
 
@@ -583,9 +573,10 @@ let roomCode = null, room = null, myColor = null;
 let phase = 'menu', legal = [];
 let handledMoveSeq = 0, remoteBusy = false;
 let passTimer = null, passDiceVal = null;
-let winSeen = false, pollTimer = null, failCount = 0;
+let winSeen = false, failCount = 0;
 let diceLockUntil = 0;
 let lastRoomSig = '', lastTokSig = '', lastPlistSig = '';
+let pollMs = 1500, pollT = null;
 
 /* ============ صدا ============ */
 let actx = null, muted = localStorage.getItem('ludo_mute') === '1';
@@ -618,7 +609,6 @@ const sfx = {
   click:  () => tone(320, .06, 'triangle', .12),
   step:   i  => tone(560 + i * 35, .05, 'sine', .09),
   capture:() => { tone(500, .28, 'sawtooth', .13, 0, -380); noiseHit(.15, .1, .05); },
-  /* فانفار رزرو — فقط اگر music/win.mp3 لود نشود پخش می‌شود */
   win:    () => {
     const seq = [
       [523.25, 0.00, .15], [659.26, .10, .15], [783.99, .20, .15],
@@ -634,7 +624,6 @@ const sfx = {
     noiseHit(.3, .05, 1.0);
   },
 };
-/* صدای تاس: فایل music/dio — در نبودش سنتز قبلی */
 let dioAudio = null;
 function diceSynth() { for (let i = 0; i < 6; i++) noiseHit(.04, .08, i * .08); }
 function playDiceSfx() {
@@ -651,13 +640,15 @@ function playDiceSfx() {
     if (p && p.catch) p.catch(diceSynth);
   } else diceSynth();
 }
-/* موسیقی پیروزی: فایل music/win — لوپ تا بسته شدن دیالوگ */
+/* ✅ موسیقی پیروزی: فقط یک‌بار کامل پخش می‌شود — بدون لوپ */
 let winAudio = null;
 function playWinMusic() {
   if (muted) return;
   if (!winAudio) {
     try {
-      winAudio = new Audio(MUSIC.win); winAudio.loop = true; winAudio.volume = .55;
+      winAudio = new Audio(MUSIC.win);
+      winAudio.loop = false;              // ← یک‌بار پخش
+      winAudio.volume = .55;
       winAudio.addEventListener('error', () => { winAudio = null; });
     } catch (e) {}
   }
@@ -672,7 +663,8 @@ function setVolIcon() { $('volIc').src = muted ? 'icons/volume-off.svg' : 'icons
  $('muteBtn').addEventListener('click', () => {
   muted = !muted; localStorage.setItem('ludo_mute', muted ? '1' : '0');
   setVolIcon();
-  if (!muted) { ac(); sfx.click(); }
+  if (muted) stopWinMusic();
+  else { ac(); sfx.click(); }
 });
 
 /* ============ زبان ============ */
@@ -699,7 +691,7 @@ function setLang(l) {
   setLang(LANGS[(LANGS.indexOf(lang) + 1) % LANGS.length]);
 });
 
-/* ============ پس‌زمینه (سحابی pre-render + ۲۵fps) ============ */
+/* ============ پس‌زمینه ============ */
 const bg = $('bg'), bctx = bg.getContext('2d');
 let bw, bh, blobs = [], stars = [];
 const neb = document.createElement('canvas');
@@ -1042,26 +1034,14 @@ function renderPlayerCards() {
   }
 }
 
-/* ============ ساخت / ورود به اتاق (بدون تغییر) ============ */
-function genCode() {
-  const chars = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
-  let s = '';
-  for (let i = 0; i < 5; i++) s += chars[Math.floor(Math.random() * chars.length)];
-  return s;
-}
-
+/* ============ ساخت / ورود به اتاق ============ */
  $('createBtn').addEventListener('click', async () => {
   hap('light'); sfx.click();
   $('createBtn').disabled = true;
   try {
-    const code = genCode();
-    await apiPut('rooms/' + code, {
-      host: myId, createdAt: Date.now(), lastAct: Date.now(), started: false,
-      players: { [myId]: { name: myName, color: 'red' } }
-    });
-    openRoom(code);
-    pollNow();
-  } catch (e) { alert(t('errCreate')); }
+    const res = await req('POST', '/room', {name: myName});
+    openRoom(res.code); pollNow();
+  } catch (e) { alert(e.busy ? t('busy') : t('errCreate')); }
   $('createBtn').disabled = false;
 });
 
@@ -1074,23 +1054,18 @@ async function joinRoomByCode(raw) {
   const code = (raw || '').trim().toUpperCase();
   if (code.length !== 5) return alert(t('errCodeLen'));
   let r;
-  try { r = await apiGet('rooms/' + code); }
-  catch (e) { return alert(t('errConn')); }
+  try { r = await req('GET', '/room/' + code); }
+  catch (e) { return alert(e.busy ? t('busy') : t('errConn')); }
   if (!r) return alert(t('errNoRoom'));
-  if (!r.players || !r.players[myId]) {
-    if (r.started) return alert(t('errStarted'));
-    if (Object.keys(r.players || {}).length >= 4) return alert(t('errFull'));
-    const used = Object.values(r.players || {}).map(p => p.color);
-    const color = COLOR_ORDER.find(c => !used.includes(c));
-    try {
-      await apiPatch(`rooms/${code}/players/${myId}`, { name: myName, color });
-      await fetch(WORKER_URL + '/db/rooms/' + code + '.json', { method: 'PATCH',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ lastAct: Date.now() }) });
-    } catch (e) { return alert(t('errJoin')); }
+  if (!((r.players || {})[myId])) {
+    try { await req('POST', '/room/' + code + '/join', {name: myName}); }
+    catch (e) {
+      if (e.api === 'full') return alert(t('errFull'));
+      if (e.api === 'started') return alert(t('errStarted'));
+      return alert(e.busy ? t('busy') : t('errJoin'));
+    }
   }
-  openRoom(code);
-  pollNow();
+  openRoom(code); pollNow();
 }
 
 function openRoom(code) {
@@ -1107,18 +1082,25 @@ function openRoom(code) {
   clearTimeout(passTimer); passDiceVal = null;
   startPolling();
 }
-function stopPolling() { clearInterval(pollTimer); pollTimer = null; }
-function startPolling() { stopPolling(); pollTimer = setInterval(pollNow, 1500); }
+
+/* ============ polling هوشمند (با backoff و فشار سرور) ============ */
+function loopPoll(){ pollT = setTimeout(async () => { await pollNow(); loopPoll(); }, pollMs); }
+function startPolling(){ stopPolling(); pollMs = 1500; loopPoll(); }
+function stopPolling(){ clearTimeout(pollT); pollT = null; }
 
 async function pollNow() {
   if (!roomCode || document.hidden) return;
   try {
-    const data = await apiGet('rooms/' + roomCode);
-    failCount = 0;
+    const data = await req('GET', '/room/' + roomCode);
+    failCount = 0; pollMs = 1500;
     connBadge.style.display = 'none';
     onRoomData(data);
   } catch (e) {
-    if (++failCount >= 4) connBadge.style.display = 'block';
+    if (e.busy) { connBadge.textContent = t('busy'); connBadge.style.display = 'block'; return; }
+    if (e.api === 'maintenance') { connBadge.textContent = t('maintenance'); connBadge.style.display = 'block'; return; }
+    if (e.api === 'banned') { leaveToMenu(t('banned')); return; }
+    if (++failCount >= 4) { connBadge.textContent = t('weak'); connBadge.style.display = 'block'; }
+    pollMs = Math.min(Math.round(pollMs * 1.7), 10000);
   }
 }
 document.addEventListener('visibilitychange', () => {
@@ -1127,13 +1109,11 @@ document.addEventListener('visibilitychange', () => {
 
 async function leaveToMenu(msg) {
   stopPolling();
-  if (roomCode && room && !room.started)
-    apiDel('rooms/' + roomCode + '/players/' + myId).catch(() => {});
+  if (roomCode) req('POST', '/room/' + roomCode + '/leave').catch(() => {});
   roomCode = null; room = null; myColor = null; phase = 'menu';
   afkBadge.style.display = 'none';
   winOverlay.classList.remove('show');
-  stopConfetti();
-  stopWinMusic();
+  stopConfetti(); stopWinMusic();
   showScreen('menu');
   if (msg) alert(msg);
 }
@@ -1142,7 +1122,7 @@ async function leaveToMenu(msg) {
  $('exitGameBtn').addEventListener('click', async () => {
   if (!roomCode || !room || !room.started) return leaveToMenu();
   if (!confirm(t('confirmExit'))) return;
-  try { await apiDel('rooms/' + roomCode + '/players/' + myId); } catch (e) {}
+  try { await req('POST', '/room/' + roomCode + '/leave'); } catch (e) {}
   leaveToMenu();
 });
 
@@ -1181,19 +1161,9 @@ async function copyRoomCode() {
 /* ============ شروع بازی ============ */
  $('startBtn').addEventListener('click', async () => {
   if (!room || room.host !== myId || room.started) return;
-  const players = Object.values(room.players);
-  if (players.length < 2) return;
   hap('light'); sfx.click();
-  const order = COLOR_ORDER.filter(c => players.some(p => p.color === c));
-  const tokens = {};
-  order.forEach(c => tokens[c] = [-1,-1,-1,-1]);
-  try {
-    await apiPatch('rooms/' + roomCode, {
-      started: true, lastAct: Date.now(),
-      game: { turn: order[0], dice: null, order, tokens, lastMove: null, winner: null }
-    });
-    pollNow();
-  } catch (e) { alert(t('errStart')); }
+  try { await req('POST', '/room/' + roomCode + '/start'); pollNow(); }
+  catch (e) { alert(e.busy ? t('busy') : t('errStart')); }
 });
 
 /* ============ دریافت وضعیت اتاق ============ */
@@ -1259,31 +1229,17 @@ function fixHostIfNeeded() {
   if (room.started) return;
   const ids = Object.keys(room.players || {});
   if (!ids.length || ids.includes(room.host)) return;
-  if (ids[0] === myId)
-    apiPatch('rooms/' + roomCode, { host: myId }).catch(() => {});
+  if (ids[0] === myId) req('POST', '/room/' + roomCode + '/claimhost').catch(() => {});
 }
 
 function cleanupDeparted() {
   const g = room.game;
   if (!g || !g.order || g.winner) return false;
   const active = new Set(Object.values(room.players || {}).map(p => p.color));
-  const dead = g.order.filter(c => !active.has(c));
-  if (!dead.length) return false;
-
-  const order = g.order.filter(c => active.has(c));
-  const tokens = JSON.parse(JSON.stringify(g.tokens || {}));
-  dead.forEach(c => delete tokens[c]);
-  const upd = { order, tokens };
-  if (!order.includes(g.turn)) { upd.turn = order[0]; upd.dice = null; }
-  if (order.length === 1) upd.winner = order[0];
-
-  dead.forEach(c => (tokenEls[c] || []).forEach(tk => tk.remove()));
-  dead.forEach(c => delete tokenEls[c]);
-  lastTokSig = '';
-  lastRoomSig = '';
-
+  if (!g.order.some(c => !active.has(c))) return false;
+  lastTokSig = ''; lastRoomSig = '';
   hintEl.textContent = t('playerLeft');
-  apiPatch(roomPath('game'), upd).then(() => pollNow()).catch(() => {});
+  req('POST', '/room/' + roomCode + '/cleanup').then(() => pollNow()).catch(() => {});
   return true;
 }
 
@@ -1378,6 +1334,7 @@ function renderGame() {
   diceEl.classList.toggle('disabled', phase !== 'my-roll');
 }
 
+/* فقط برای هایلایت کلاینت — قاعده‌ی اصلی سمت سرور چک می‌شود */
 function computeLegal(color, d) {
   const moves = [];
   state.tokens[color].forEach((s, i) => {
@@ -1397,15 +1354,12 @@ function schedulePass(diceVal) {
     if (!room) return;
     const g = room.game;
     if (g.turn === myColor && g.dice === diceVal && !g.winner) {
-      const p = (diceVal === 6)
-        ? apiPatch(roomPath('game'), { dice: null })
-        : nextTurn();
-      Promise.resolve(p).then(() => pollNow()).catch(() => {});
+      req('POST', '/room/' + roomCode + '/pass').then(() => pollNow()).catch(() => {});
     }
   }, 1300);
 }
 
-/* ============ انداختن تاس ============ */
+/* ============ انداختن تاس (قرعه سمت سرور) ============ */
 diceEl.addEventListener('click', () => {
   if (phase !== 'my-roll') return;
   if (Date.now() < diceLockUntil) return;
@@ -1422,27 +1376,23 @@ diceEl.addEventListener('click', () => {
     if (++n === 9) {
       clearInterval(iv);
       diceEl.classList.remove('rolling');
-      const val = 1 + Math.floor(Math.random() * 6);
-      setDice(val);
-      Promise.all([
-        apiPatch(roomPath('game'), { dice: val }),
-        touch(),
-      ]).then(() => {
+      setDice(6);
+      req('POST', '/room/' + roomCode + '/roll').then(res => {
         diceLockUntil = Date.now() + 2600;
         phase = 'wait';
+        if (res && res.dice) setDice(res.dice);
         pollNow();
-      }).catch(() => {
-        phase = 'my-roll';
-        diceLockUntil = 0;
-        diceEl.classList.remove('disabled');
-        diceEl.classList.add('myRoll');
-        hintEl.textContent = t('connLost');
+      }).catch(e => {
+        if (e.api === 'rolled' || e.api === 'turn' || e.api === 'over') { phase = 'wait'; pollNow(); return; }
+        phase = 'my-roll'; diceLockUntil = 0;
+        diceEl.classList.remove('disabled'); diceEl.classList.add('myRoll');
+        hintEl.textContent = e.busy ? t('busy') : t('connLost');
       });
     }
   }, 85);
 });
 
-/* ============ حرکت مهره ============ */
+/* ============ حرکت مهره (اعتبارسنجی سمت سرور) ============ */
 async function onTokenClick(color, i) {
   if (color !== myColor || phase !== 'my-move') return;
   const mv = legal.find(m => m.i === i);
@@ -1451,63 +1401,30 @@ async function onTokenClick(color, i) {
   hap('light');
   clearHighlight();
   ensureTokens();
-
-  const diceVal = room.game.dice;
   const from = state.tokens[color][i], to = mv.to;
-  const tokens = JSON.parse(JSON.stringify(state.tokens));
-  tokens[color][i] = to;
-
-  let hit = false, hitColor = null;
-  if (to >= 0 && to <= 50) {
-    const abs = (COLORS[color].start + to) % 52;
-    if (!SAFE.includes(abs)) {
-      for (const oc of room.game.order) {
-        if (oc === color) continue;
-        for (let k = 0; k < 4; k++) {
-          const s = tokens[oc][k];
-          if (s >= 0 && s <= 50 && (COLORS[oc].start + s) % 52 === abs) {
-            tokens[oc][k] = -1; hit = true; hitColor = oc;
-          }
-        }
-      }
-    }
-  }
-
   await animateMove(color, i, from, to);
-  state.tokens = tokens;
-  renderTokens();
-  if (hit) {
-    const [r, c] = posOf(color, to, i);
-    burst(r, c, hitColor);
-    sfx.capture(); hap('medium');
-    hintEl.textContent = t('capture');
-  }
-
-  const won = tokens[color].every(s => s === 56);
-  const upd = {
-    tokens, dice: null,
-    lastMove: { by: myId, color, i, from, to, hit, hitColor, seq: Date.now() },
-  };
-  if (won) upd.winner = color;
-  else if (diceVal !== 6) {
-    const order = room.game.order;
-    upd.turn = order[(order.indexOf(room.game.turn) + 1) % order.length];
-  }
-  phase = 'wait';
   try {
-    await apiPatch(roomPath('game'), upd);
-    touch();
+    const res = await req('POST', `/room/${roomCode}/move`, { i });
+    state.tokens = res.game.tokens;
+    room.game = res.game;
+    renderTokens(); renderPlayerCards();
+    const lm = res.game.lastMove;
+    if (lm && lm.hit) {
+      const [r, c] = posOf(lm.color, lm.to, lm.i);
+      burst(r, c, lm.hitColor);
+      sfx.capture(); hap('medium');
+      hintEl.textContent = t('capture');
+    }
+    phase = 'wait';
+    renderGame();
     pollNow();
-  } catch (e) { hintEl.textContent = t('moveErr'); }
-}
-
-function nextTurn() {
-  const order = room.game.order;
-  const idx = order.indexOf(room.game.turn);
-  return Promise.all([
-    apiPatch(roomPath('game'), { turn: order[(idx + 1) % order.length], dice: null }),
-    touch(),
-  ]);
+  } catch (e) {
+    phase = 'wait'; lastTokSig = ''; lastRoomSig = '';
+    if (e.api === 'illegal' || e.api === 'turn') hintEl.textContent = t('errIllegal');
+    else if (e.busy) hintEl.textContent = t('busy');
+    else hintEl.textContent = t('moveErr');
+    pollNow();
+  }
 }
 
 /* ============ AFK ============ */
@@ -1534,10 +1451,7 @@ function afkCheck() {
   if (g.turn !== myColor && stale > AFK_PASS) {
     const i = g.order.indexOf(g.turn);
     if (i >= 0 && g.order[(i + 1) % g.order.length] === myColor) {
-      Promise.all([
-        apiPatch(roomPath('game'), { turn: myColor, dice: null }),
-        touch(),
-      ]).then(() => pollNow()).catch(() => {});
+      req('POST', '/room/' + roomCode + '/skip').then(() => pollNow()).catch(() => {});
       hintEl.textContent = t('afkPass');
     }
   }
@@ -1551,11 +1465,13 @@ function tryCloseRoom(msg) {
     || room.host === myId
     || (room.game && room.game.turn === myColor)
     || !room.players[room.host];
-  if (canClose) apiDel('rooms/' + roomCode).catch(() => {});
+  if (canClose) {
+    /* اتاق را با خروج همه می‌بندیم — سرور خودش وقتی خالی شد حذفش می‌کند */
+  }
   leaveToMenu(msg);
 }
 
-/* ============ برنده + کانفتی (بارش یکنواخت و مبتنی بر dt) ============ */
+/* ============ برنده + کانفتی ============ */
 const cCanvas = $('confetti'), cctx = cCanvas.getContext('2d');
 const CONF_COLORS = ['#e53935','#43a047','#fdd835','#1e88e5','#ff7ab6','#ffffff'];
 let confP = [], confRun = false, lastCf = 0, confElapsed = 0;
@@ -1565,17 +1481,16 @@ function startConfetti() {
   const W = cCanvas.width, H = cCanvas.height, N = 110;
   confP = [];
   for (let i = 0; i < N; i++) {
-    /* پخش یکنواخت روی ستون زمان ورود → تراکم از اول تا آخر یکسان */
     const lane = (i + Math.random() * .7) / N;
     confP.push({
       x: Math.random() * W,
       y: -30 - lane * H * .85,
       w: 6 + Math.random() * 5, h: 9 + Math.random() * 6,
       c: CONF_COLORS[i % CONF_COLORS.length],
-      vy: 2.1 + Math.random() * 1.1,          /* پراکندگی کم سرعت → بارش منسجم */
+      vy: 2.1 + Math.random() * 1.1,
       ph: Math.random() * 6.28,
-      sw: .6 + Math.random() * .9,            /* فرکانس موج افقی */
-      amp: .5 + Math.random() * .8,           /* دامنه موج افقی */
+      sw: .6 + Math.random() * .9,
+      amp: .5 + Math.random() * .8,
       rot: Math.random() * 6.28,
       vr: -.14 + Math.random() * .28,
     });
@@ -1586,13 +1501,13 @@ function startConfetti() {
 function confTick(ts) {
   if (!confRun) return;
   if (!lastCf) lastCf = ts;
-  const dt = Math.min((ts - lastCf) / 16.7, 2.5);  /* نرمال‌سازی با زمان واقعی */
+  const dt = Math.min((ts - lastCf) / 16.7, 2.5);
   lastCf = ts;
   confElapsed += dt * 16.7;
   cctx.clearRect(0, 0, cCanvas.width, cCanvas.height);
   let alive = 0;
   for (const p of confP) {
-    if (p.y > cCanvas.height + 40) continue;      /* خروج = حذف، بدون بازتولید */
+    if (p.y > cCanvas.height + 40) continue;
     alive++;
     p.y += p.vy * dt;
     p.x += Math.sin(confElapsed / 1000 * p.sw + p.ph) * p.amp * dt;
@@ -1619,12 +1534,8 @@ function showWin(color) {
 againBtn.addEventListener('click', async () => {
   hap('light'); sfx.click();
   stopWinMusic();
-  const order = room.game.order, tokens = {};
-  order.forEach(c => tokens[c] = [-1,-1,-1,-1]);
   try {
-    await apiPatch(roomPath('game'),
-      { turn: order[0], dice: null, tokens, lastMove: null, winner: null });
-    touch();
+    await req('POST', '/room/' + roomCode + '/start');
     winSeen = false;
     winOverlay.classList.remove('show');
     stopConfetti();
