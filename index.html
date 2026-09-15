@@ -10,29 +10,20 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
 :root{--sub:#9fb4c9;--stroke:rgba(255,255,255,.12)}
-body{
-  min-height:100vh;background:#0a0f18;
-  font-family:'Vazirmatn',Tahoma,sans-serif;color:#eaf2fb;
-  display:flex;flex-direction:column;align-items:center;
-  overflow-x:hidden;
-}
+body{min-height:100vh;background:#0a0f18;font-family:'Vazirmatn',Tahoma,sans-serif;color:#eaf2fb;
+  display:flex;flex-direction:column;align-items:center;overflow-x:hidden}
 #bg{position:fixed;inset:0;z-index:0;display:block}
-.ic{width:17px;height:17px;flex-shrink:0;display:block;object-fit:contain;
-  filter:brightness(0) invert(1)}
-
+.ic{width:17px;height:17px;flex-shrink:0;display:block;object-fit:contain;filter:brightness(0) invert(1)}
 .screen{display:none;position:relative;z-index:1;flex-direction:column;align-items:center;
   width:100%;max-width:440px;margin:0 auto;padding:14px 10px 24px}
 #gameScreen{max-width:500px}
 .screen.active{display:flex;animation:screenIn .4s cubic-bezier(.2,.9,.3,1)}
 @keyframes screenIn{from{opacity:0;transform:translateY(16px) scale(.98)}}
-
 .card{position:relative;width:100%;margin-top:14px;padding:20px 16px;border-radius:22px;
   background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.04));
   border:1px solid var(--stroke);
   backdrop-filter:blur(16px) saturate(150%);-webkit-backdrop-filter:blur(16px) saturate(150%);
   box-shadow:0 18px 44px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.14)}
-
-/* منو */
 .logoArea{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:26px}
 .topbar{font-size:46px;font-weight:900;letter-spacing:10px;line-height:1}
 .gradText{background:linear-gradient(92deg,#8fd3ff,#b48bff 45%,#ff9bd2);
@@ -48,7 +39,6 @@ body{
 .langBtn:active{transform:scale(.94)}
 .langBtn .ic{width:18px;height:18px}
 .footHint{margin-top:16px;color:#5c7290;font-size:11.5px;letter-spacing:.5px}
-
 .btn{position:relative;overflow:hidden;font-family:inherit;border:none;border-radius:16px;
   padding:13px 18px;font-size:15px;font-weight:bold;cursor:pointer;width:100%;margin-top:10px;
   display:flex;align-items:center;justify-content:center;gap:9px;
@@ -64,14 +54,11 @@ body{
 .btn.green{color:#fff;background:linear-gradient(140deg,#3ec97a,#1f9d55 60%,#178045);
   box-shadow:0 10px 26px rgba(31,157,85,.4),inset 0 1px 0 rgba(255,255,255,.3)}
 .btn.ghost{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);color:#d6e5f5}
-
 #joinRow{display:flex;gap:8px;width:100%;margin-top:10px}
 #joinCode{flex:1;min-width:0;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);
   border-radius:16px;color:#fff;font-family:inherit;font-size:16px;letter-spacing:5px;
   text-align:center;padding:12px;text-transform:uppercase;outline:none;transition:.25s}
 #joinCode:focus{border-color:rgba(90,162,255,.8);box-shadow:0 0 0 3px rgba(90,162,255,.22)}
-
-/* لابی */
 .codeBox{display:flex;align-items:stretch;gap:8px;width:100%;margin-top:14px;padding:6px;
   border-radius:18px;
   background:linear-gradient(120deg,#5aa2ff,#b48bff,#ff9bd2,#5aa2ff);
@@ -96,16 +83,11 @@ body{
 .you{font-size:10.5px;background:rgba(90,162,255,.18);border:1px solid rgba(90,162,255,.5);
   color:#bcd9ff;padding:2px 9px;border-radius:20px;margin-inline-start:auto}
 .crown ~ .you,.you ~ .crown{margin-inline-start:6px}
-
-/* بازی */
 #gameTitle{font-size:22px;font-weight:900;letter-spacing:11px;margin:4px 0 10px}
-#boardWrap{width:min(94vw,470px,58vh);border-radius:28px;
-  box-shadow:0 24px 44px rgba(0,0,0,.55)}
+#boardWrap{width:min(94vw,470px,58vh);border-radius:28px;box-shadow:0 24px 44px rgba(0,0,0,.55)}
 #board{display:block;width:100%;height:auto}
-
 #guideBar{width:min(94vw,470px);display:flex;gap:10px;margin-top:12px;min-height:52px;
-  background:rgba(13,20,32,.82);
-  border:1px solid var(--stroke);border-radius:18px;padding:10px 13px}
+  background:rgba(13,20,32,.82);border:1px solid var(--stroke);border-radius:18px;padding:10px 13px}
 #turnDot{width:12px;height:12px;border-radius:50%;background:#fff;margin-top:7px;
   flex-shrink:0;position:relative;transition:background .3s}
 #turnDot::after{content:'';position:absolute;inset:-4px;border-radius:50%;
@@ -119,7 +101,6 @@ body{
   display:flex;align-items:center;justify-content:center;transition:transform .15s}
 .miniBtn .ic{width:19px;height:19px}
 .miniBtn:active{transform:scale(.88)}
-
 #bottomBar{direction:ltr;width:min(94vw,470px);display:flex;align-items:center;gap:12px;margin-top:12px}
 #leftPanel{direction:rtl;flex:1;min-width:0}
 #playerCards{display:flex;flex-direction:column;gap:7px;max-height:200px;overflow-y:auto;
@@ -146,27 +127,18 @@ body{
   background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.35) 50%,transparent 65%);
   background-size:250% 100%;animation:cardSheen 2.6s linear infinite;pointer-events:none}
 @keyframes cardSheen{from{background-position:130% 0}to{background-position:-130% 0}}
-
-/* ---- تاس ---- */
 #diceBox{flex-shrink:0}
 #dice{width:clamp(92px,26vw,112px);cursor:pointer;padding:6px;position:relative;
   filter:drop-shadow(0 6px 12px rgba(0,0,0,.45));transition:transform .15s}
 #dice:active{transform:scale(.88)}
 #dice.disabled{opacity:.55;pointer-events:none}
-#dice.myRoll{
-  filter:drop-shadow(0 6px 12px rgba(0,0,0,.45)) drop-shadow(0 0 13px rgba(255,255,255,.75));
+#dice.myRoll{filter:drop-shadow(0 6px 12px rgba(0,0,0,.45)) drop-shadow(0 0 13px rgba(255,255,255,.75));
   animation:dicePulse 1.25s ease-in-out infinite}
 @keyframes dicePulse{50%{transform:scale(1.06)}}
 #dice.rolling{animation:shake .4s ease infinite}
-@keyframes shake{
-  0%,100%{transform:rotate(0)}
-  25%{transform:rotate(-13deg) translateY(-7px)}
-  55%{transform:rotate(11deg) translateY(-3px)}
-  80%{transform:rotate(-6deg)}
-}
+@keyframes shake{0%,100%{transform:rotate(0)}25%{transform:rotate(-13deg) translateY(-7px)}
+  55%{transform:rotate(11deg) translateY(-3px)}80%{transform:rotate(-6deg)}}
 #pips circle{transition:opacity .12s}
-
-/* ---- مهره‌ها ---- */
 .token{transition:transform .18s ease-out}
 .tbody,.tshadow,.selRing{transform-box:fill-box;transform-origin:center}
 .token.hop .tbody{animation:hop .2s cubic-bezier(.3,1.4,.5,1)}
@@ -182,8 +154,6 @@ body{
 @keyframes tw{50%{opacity:.5}}
 svg .glowRect.on{animation:baseGlow 1.8s ease-in-out infinite}
 @keyframes baseGlow{50%{opacity:.7}}
-
-/* برنده */
 #winOverlay{position:fixed;inset:0;background:rgba(8,13,20,.7);z-index:10;
   display:flex;align-items:center;justify-content:center;
   opacity:0;pointer-events:none;transition:opacity .4s;
@@ -207,7 +177,6 @@ svg .glowRect.on{animation:baseGlow 1.8s ease-in-out infinite}
 #closeWinBtn{background:rgba(255,255,255,.1);color:#cfe1f3;border:none;
   font-family:inherit;font-size:14px;padding:10px 24px;border-radius:13px;margin-top:10px;
   cursor:pointer;display:block;margin-inline:auto}
-
 #connBadge{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);z-index:20;display:none;
   background:rgba(160,35,35,.92);padding:8px 18px;border-radius:22px;font-size:12px;
   border:1px solid rgba(255,120,120,.4);box-shadow:0 8px 24px rgba(0,0,0,.4)}
@@ -220,7 +189,6 @@ svg .glowRect.on{animation:baseGlow 1.8s ease-in-out infinite}
 
 <canvas id="bg"></canvas>
 
-<!-- منوی اصلی -->
 <div id="menuScreen" class="screen active">
   <div class="logoArea">
     <div class="topbar gradText">LUDO</div>
@@ -236,14 +204,12 @@ svg .glowRect.on{animation:baseGlow 1.8s ease-in-out infinite}
   </div>
   <div class="langRow">
     <button id="langBtn" class="langBtn">
-      <img class="ic" src="icons/languages.svg" alt="">
-      <span id="langLbl"></span>
+      <img class="ic" src="icons/languages.svg" alt=""><span id="langLbl"></span>
     </button>
   </div>
   <div class="footHint" data-i18n="foot"></div>
 </div>
 
-<!-- لابی -->
 <div id="lobbyScreen" class="screen">
   <div class="topbar" style="font-size:20px;letter-spacing:2px" data-i18n="lobbyTitle"></div>
   <div class="codeBox" id="roomCodeBox">
@@ -271,11 +237,9 @@ svg .glowRect.on{animation:baseGlow 1.8s ease-in-out infinite}
   </div>
 </div>
 
-<!-- بازی -->
 <div id="gameScreen" class="screen">
   <div id="gameTitle" class="gradText">LUDO</div>
   <div id="boardWrap"><svg id="board" viewBox="0 0 600 600"></svg></div>
-
   <div id="guideBar">
     <span id="turnDot"></span>
     <div style="min-width:0;flex:1">
@@ -283,6 +247,9 @@ svg .glowRect.on{animation:baseGlow 1.8s ease-in-out infinite}
       <div id="hint"></div>
     </div>
     <div id="guideBtns">
+      <button id="vibBtn" class="miniBtn" title="vibration">
+        <img class="ic" id="vibIc" src="icons/vibrate.svg" alt="">
+      </button>
       <button id="muteBtn" class="miniBtn" title="sound">
         <img class="ic" id="volIc" src="icons/volume.svg" alt="">
       </button>
@@ -291,7 +258,6 @@ svg .glowRect.on{animation:baseGlow 1.8s ease-in-out infinite}
       </button>
     </div>
   </div>
-
   <div id="bottomBar">
     <div id="leftPanel"><div id="playerCards"></div></div>
     <div id="diceBox">
@@ -299,18 +265,14 @@ svg .glowRect.on{animation:baseGlow 1.8s ease-in-out infinite}
         <svg viewBox="0 0 100 100">
           <defs>
             <linearGradient id="diceFace" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="#ffffff"/>
-              <stop offset="1" stop-color="#d9d9d9"/>
+              <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#d9d9d9"/>
             </linearGradient>
           </defs>
           <rect x="3" y="3" width="94" height="94" rx="24" fill="url(#diceFace)" stroke="#bfbfbf" stroke-width="2"/>
           <g id="pips" fill="#262626">
-            <circle id="p_c"  cx="50" cy="50" r="9.5"/>
-            <circle id="p_tl" cx="29" cy="29" r="9.5"/>
-            <circle id="p_tr" cx="71" cy="29" r="9.5"/>
-            <circle id="p_ml" cx="29" cy="50" r="9.5"/>
-            <circle id="p_mr" cx="71" cy="50" r="9.5"/>
-            <circle id="p_bl" cx="29" cy="71" r="9.5"/>
+            <circle id="p_c" cx="50" cy="50" r="9.5"/><circle id="p_tl" cx="29" cy="29" r="9.5"/>
+            <circle id="p_tr" cx="71" cy="29" r="9.5"/><circle id="p_ml" cx="29" cy="50" r="9.5"/>
+            <circle id="p_mr" cx="71" cy="50" r="9.5"/><circle id="p_bl" cx="29" cy="71" r="9.5"/>
             <circle id="p_br" cx="71" cy="71" r="9.5"/>
           </g>
         </svg>
@@ -319,7 +281,6 @@ svg .glowRect.on{animation:baseGlow 1.8s ease-in-out infinite}
   </div>
 </div>
 
-<!-- برنده -->
 <div id="winOverlay">
   <canvas id="confetti"></canvas>
   <div class="winCard">
@@ -338,11 +299,10 @@ svg .glowRect.on{animation:baseGlow 1.8s ease-in-out infinite}
 <script>
 'use strict';
 
-/* ============ ۱) تنظیمات ============ */
+/* ============ تنظیمات ============ */
 const WORKER_URL = 'https://ludo-proxy.qissy-pc.workers.dev';
 const BOT_USERNAME = 'PVP_Ludo_bot';
 const APP_SHORT    = 'ludo';
-const MUSIC = { win:'music/win.mp3', dice:'music/dio.mp3' };
 
 const tg = window.Telegram?.WebApp ?? {};
 tg.ready?.(); tg.expand?.();
@@ -355,7 +315,7 @@ const startParam = tg.initDataUnsafe?.start_param;
 const hap  = t => { try{tg.HapticFeedback?.impactOccurred?.(t)}catch(e){} };
 const hapN = t => { try{tg.HapticFeedback?.notificationOccurred?.(t)}catch(e){} };
 
-/* ============ لایه API جدید (Worker v2) ============ */
+/* ============ لایه API ============ */
 const INIT_DATA = tg.initData || '';
 const API = WORKER_URL + '/api';
 async function req(method, path, body) {
@@ -501,7 +461,6 @@ const colorName = c => I18N[lang].colors[c];
 /* ============ ثابت‌های بازی ============ */
 const CELL = 40;
 const px = v => v * CELL + 20;
-
 const COLORS = {
   red:    { start:0,  base:{r:0,c:0},
             home5:[[7,1],[7,2],[7,3],[7,4],[7,5]], end:[7,6.5],
@@ -538,8 +497,7 @@ const PATH = [
 const SAFE = [0,8,13,21,26,34,39,47];
 const COLOR_ORDER = ['red','green','yellow','blue'];
 const ON_COLOR = { red:'#fff', green:'#fff', yellow:'#4a3900', blue:'#fff' };
-
-const AFK_PASS   = 25000;
+const AFK_PASS   = 30000;
 const AFK_WARN   = 60000;
 const AFK_CLOSE  = 150000;
 const LOBBY_WARN = 8*60000;
@@ -552,7 +510,6 @@ const diceEl = $('dice'), hintEl = $('hint'), connBadge = $('connBadge');
 const afkBadge = $('afkBadge');
 const winOverlay = $('winOverlay'), winText = $('winText');
 const againBtn = $('againBtn'), closeWinBtn = $('closeWinBtn');
-
 const NS = 'http://www.w3.org/2000/svg';
 function el(tag, attrs = {}) {
   const e = document.createElementNS(NS, tag);
@@ -577,8 +534,10 @@ let winSeen = false, failCount = 0;
 let diceLockUntil = 0;
 let lastRoomSig = '', lastTokSig = '', lastPlistSig = '';
 let pollMs = 1500, pollT = null;
+let srvOffset = 0;
+let prevTurn = null;
 
-/* ============ صدا ============ */
+/* ============ صدا (سنتز پیش‌فرض — بدون فایل) ============ */
 let actx = null, muted = localStorage.getItem('ludo_mute') === '1';
 function ac() {
   if (!actx) { try { actx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){} }
@@ -607,64 +566,23 @@ function noiseHit(d=.06, v=.12, when=0) {
 }
 const sfx = {
   click:  () => tone(320, .06, 'triangle', .12),
+  dice:   () => { for (let i = 0; i < 6; i++) noiseHit(.04, .08, i * .08); },
   step:   i  => tone(560 + i * 35, .05, 'sine', .09),
   capture:() => { tone(500, .28, 'sawtooth', .13, 0, -380); noiseHit(.15, .1, .05); },
-  win:    () => {
-    const seq = [
-      [523.25, 0.00, .15], [659.26, .10, .15], [783.99, .20, .15],
-      [1046.50, .30, .34],
-      [783.99, .68, .12], [880.00, .80, .12],
-      [1046.50, .92, .60],
-    ];
-    seq.forEach(([f, w, d]) => {
-      tone(f, d, 'triangle', .16, w);
-      tone(f / 2, d, 'sine', .08, w);
-    });
-    [523.25, 659.26, 783.99, 1046.50].forEach(f => tone(f, 1.2, 'sine', .045, 1.0));
-    noiseHit(.3, .05, 1.0);
-  },
 };
-let dioAudio = null;
-function diceSynth() { for (let i = 0; i < 6; i++) noiseHit(.04, .08, i * .08); }
-function playDiceSfx() {
-  if (muted) return;
-  if (!dioAudio) {
-    try {
-      dioAudio = new Audio(MUSIC.dice); dioAudio.volume = .85;
-      dioAudio.addEventListener('error', () => { dioAudio = null; });
-    } catch (e) {}
-  }
-  if (dioAudio) {
-    try { dioAudio.currentTime = 0; } catch (e) {}
-    const p = dioAudio.play();
-    if (p && p.catch) p.catch(diceSynth);
-  } else diceSynth();
-}
-/* ✅ موسیقی پیروزی: فقط یک‌بار کامل پخش می‌شود — بدون لوپ */
-let winAudio = null;
-function playWinMusic() {
-  if (muted) return;
-  if (!winAudio) {
-    try {
-      winAudio = new Audio(MUSIC.win);
-      winAudio.loop = false;              // ← یک‌بار پخش
-      winAudio.volume = .55;
-      winAudio.addEventListener('error', () => { winAudio = null; });
-    } catch (e) {}
-  }
-  if (winAudio) {
-    try { winAudio.currentTime = 0; } catch (e) {}
-    const p = winAudio.play();
-    if (p && p.catch) p.catch(() => sfx.win());
-  } else sfx.win();
-}
-function stopWinMusic() { if (winAudio) { try { winAudio.pause(); } catch (e) {} } }
 function setVolIcon() { $('volIc').src = muted ? 'icons/volume-off.svg' : 'icons/volume.svg'; }
  $('muteBtn').addEventListener('click', () => {
   muted = !muted; localStorage.setItem('ludo_mute', muted ? '1' : '0');
   setVolIcon();
-  if (muted) stopWinMusic();
-  else { ac(); sfx.click(); }
+  if (!muted) { ac(); sfx.click(); }
+});
+
+/* ============ ویبره توجه (نوبت) ============ */
+let vib = localStorage.getItem('ludo_vib') !== '0';
+function setVibIcon() { $('vibIc').src = vib ? 'icons/vibrate.svg' : 'icons/vibrate_off.svg'; }
+ $('vibBtn').addEventListener('click', () => {
+  vib = !vib; localStorage.setItem('ludo_vib', vib ? '1' : '0');
+  setVibIcon(); hap('light');
 });
 
 /* ============ زبان ============ */
@@ -699,7 +617,6 @@ const nctx = neb.getContext('2d');
 let lastBgFrame = 0;
 const hexA = (h,a) => { const n = parseInt(h.slice(1),16);
   return `rgba(${n>>16&255},${n>>8&255},${n&255},${a})`; };
-
 function sizeBg() {
   const dpr = Math.min(devicePixelRatio || 1, 2);
   bw = innerWidth; bh = innerHeight;
@@ -724,8 +641,7 @@ function renderNebula() {
 function initBg() {
   sizeBg();
   blobs = [['#2b6fe0',.30],['#7b3ff2',.22],['#00b3a4',.18],['#e05fa0',.13]].map((b,i) =>
-    ({ c:b[0], a:b[1], x:Math.random(), y:Math.random(),
-       r:.45+Math.random()*.35 }));
+    ({ c:b[0], a:b[1], x:Math.random(), y:Math.random(), r:.45+Math.random()*.35 }));
   stars = Array.from({length:55}, () =>
     ({ x:Math.random(), y:Math.random(), r:Math.random()*1.3+.3,
        tw:Math.random()*7, sp:.4+Math.random()*.8 }));
@@ -774,11 +690,9 @@ function starPath(cx, cy, R, r) {
   return d + 'Z';
 }
 let glowEls = {}, fxLayer = null;
-
 function drawBoard() {
   svg.innerHTML = ''; glowEls = {};
   const defs = el('defs');
-
   for (const c of COLOR_ORDER) {
     const o = COLORS[c];
     const rg = el('radialGradient', {id:'rg-'+c, cx:'35%', cy:'28%', r:'85%'});
@@ -814,7 +728,6 @@ function drawBoard() {
   cellBg.append(el('stop',{offset:'0','stop-color':'#fffef9'}),
                 el('stop',{offset:'1','stop-color':'#f0e5ca'}));
   defs.appendChild(cellBg);
-
   const sh = el('filter', {id:'fSh', x:'-40%', y:'-40%', width:'180%', height:'180%'});
   sh.appendChild(el('feDropShadow',{dx:0, dy:3, stdDeviation:3, 'flood-color':'rgba(60,40,10,.35)'}));
   defs.appendChild(sh);
@@ -824,14 +737,12 @@ function drawBoard() {
     values:'0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.06 0'}));
   defs.appendChild(grain);
   svg.appendChild(defs);
-
   svg.appendChild(el('rect',{x:0, y:0, width:600, height:600, rx:28, fill:'url(#metal)'}));
   svg.appendChild(el('rect',{x:8, y:8, width:584, height:584, rx:22,
                              fill:'url(#paper)', stroke:'rgba(0,0,0,.25)'}));
   svg.appendChild(el('rect',{x:8, y:8, width:584, height:584, rx:22, filter:'url(#grain)', opacity:.6}));
   svg.appendChild(el('rect',{x:14, y:14, width:572, height:572, rx:18,
                              fill:'none', stroke:'rgba(255,255,255,.5)', 'stroke-width':1}));
-
   for (const c of COLOR_ORDER) {
     const o = COLORS[c];
     const g = el('g');
@@ -854,7 +765,6 @@ function drawBoard() {
     });
     svg.appendChild(g);
   }
-
   PATH.forEach((p, i) => {
     const [r, c] = p;
     const sc = COLOR_ORDER.find(k => COLORS[k].start === i);
@@ -872,7 +782,6 @@ function drawBoard() {
           fill:'#e6b23f', stroke:'#c08e1d', 'stroke-width':.8}));
     }
   });
-
   for (const c of COLOR_ORDER) {
     COLORS[c].home5.forEach(h => {
       svg.appendChild(el('rect',{x:h[1]*CELL+2, y:h[0]*CELL+2, width:CELL-4, height:CELL-4,
@@ -881,7 +790,6 @@ function drawBoard() {
         height:(CELL-10)/2.2, rx:5, fill:'rgba(255,255,255,.25)'}));
     });
   }
-
   const tri = (pts, c) => svg.appendChild(el('polygon',{points:pts,
     fill:`url(#lg-${c})`, stroke:'rgba(0,0,0,.18)', 'stroke-width':1}));
   tri('242,242 358,242 300,300','green');
@@ -896,7 +804,6 @@ function drawBoard() {
                           'font-weight':'900', 'letter-spacing':'3', fill:'#7a6a45'});
   logo.textContent = 'LUDO';
   svg.appendChild(logo);
-
   fxLayer = el('g');
   svg.appendChild(fxLayer);
 }
@@ -983,7 +890,6 @@ async function animateMove(color, i, from, to) {
   }
   g.classList.remove('hop');
 }
-
 function burst(r, c, color) {
   if (!fxLayer) return;
   const cx = px(c), cy = px(r), col = COLORS[color]?.lite || '#fff';
@@ -1044,12 +950,10 @@ function renderPlayerCards() {
   } catch (e) { alert(e.busy ? t('busy') : t('errCreate')); }
   $('createBtn').disabled = false;
 });
-
  $('joinBtn').addEventListener('click', () => { hap('light'); sfx.click(); joinRoomByCode($('joinCode').value); });
  $('joinCode').addEventListener('keydown', e => {
   if (e.key === 'Enter') joinRoomByCode($('joinCode').value);
 });
-
 async function joinRoomByCode(raw) {
   const code = (raw || '').trim().toUpperCase();
   if (code.length !== 5) return alert(t('errCodeLen'));
@@ -1067,7 +971,6 @@ async function joinRoomByCode(raw) {
   }
   openRoom(code); pollNow();
 }
-
 function openRoom(code) {
   roomCode = code;
   handledMoveSeq = 0;
@@ -1075,6 +978,7 @@ function openRoom(code) {
   winSeen = false;
   failCount = 0;
   diceLockUntil = 0;
+  prevTurn = null;
   lastRoomSig = '';
   lastTokSig = '';
   lastPlistSig = '';
@@ -1083,15 +987,15 @@ function openRoom(code) {
   startPolling();
 }
 
-/* ============ polling هوشمند (با backoff و فشار سرور) ============ */
+/* ============ polling ============ */
 function loopPoll(){ pollT = setTimeout(async () => { await pollNow(); loopPoll(); }, pollMs); }
 function startPolling(){ stopPolling(); pollMs = 1500; loopPoll(); }
 function stopPolling(){ clearTimeout(pollT); pollT = null; }
-
 async function pollNow() {
   if (!roomCode || document.hidden) return;
   try {
     const data = await req('GET', '/room/' + roomCode);
+    if (data && data._srv) srvOffset = Date.now() - data._srv;
     failCount = 0; pollMs = 1500;
     connBadge.style.display = 'none';
     onRoomData(data);
@@ -1113,12 +1017,11 @@ async function leaveToMenu(msg) {
   roomCode = null; room = null; myColor = null; phase = 'menu';
   afkBadge.style.display = 'none';
   winOverlay.classList.remove('show');
-  stopConfetti(); stopWinMusic();
+  stopConfetti();
   showScreen('menu');
   if (msg) alert(msg);
 }
  $('leaveBtn').addEventListener('click', () => { hap('light'); sfx.click(); leaveToMenu(); });
-
  $('exitGameBtn').addEventListener('click', async () => {
   if (!roomCode || !room || !room.started) return leaveToMenu();
   if (!confirm(t('confirmExit'))) return;
@@ -1170,7 +1073,6 @@ async function copyRoomCode() {
 function namesFromPlayers() {
   for (const p of Object.values(room.players || {})) names[p.color] = p.name;
 }
-
 function onRoomData(data) {
   if (!data) return leaveToMenu(t('roomClosed'));
   room = data;
@@ -1178,19 +1080,14 @@ function onRoomData(data) {
   if (!me) return;
   myColor = me.color;
   namesFromPlayers();
-
   fixHostIfNeeded();
   afkCheck();
-
   if (!room.started) { phase = 'lobby'; return showLobby(); }
-
   const g = room.game;
   state.tokens = g.tokens;
   if (phase === 'anim' || phase === 'rolling') return;
   if (remoteBusy) return;
-
   if (cleanupDeparted()) return;
-
   if (g.lastMove && g.lastMove.seq > handledMoveSeq) {
     handledMoveSeq = g.lastMove.seq;
     const mv = g.lastMove;
@@ -1217,21 +1114,18 @@ function onRoomData(data) {
       return;
     }
   }
-
   const sig = JSON.stringify([g.turn, g.dice, g.winner, g.tokens, g.order,
     g.lastMove ? g.lastMove.seq : 0, room.host, room.started, room.players]);
   if (sig === lastRoomSig && !(g.turn === myColor && g.dice == null)) return;
   lastRoomSig = sig;
   renderGame();
 }
-
 function fixHostIfNeeded() {
   if (room.started) return;
   const ids = Object.keys(room.players || {});
   if (!ids.length || ids.includes(room.host)) return;
   if (ids[0] === myId) req('POST', '/room/' + roomCode + '/claimhost').catch(() => {});
 }
-
 function cleanupDeparted() {
   const g = room.game;
   if (!g || !g.order || g.winner) return false;
@@ -1242,8 +1136,6 @@ function cleanupDeparted() {
   req('POST', '/room/' + roomCode + '/cleanup').then(() => pollNow()).catch(() => {});
   return true;
 }
-
-/* لیست لابی فقط با تغییر واقعی بازسازی می‌شود */
 function showLobby() {
   showScreen('lobby');
   $('roomCodeTxt').textContent = roomCode;
@@ -1273,7 +1165,6 @@ function showLobby() {
 function clearHighlight() {
   document.querySelectorAll('.movable').forEach(e => e.classList.remove('movable'));
 }
-
 function renderGame() {
   showScreen('game');
   const g = room.game;
@@ -1283,10 +1174,8 @@ function renderGame() {
     setDice(g.dice);
     diceLockUntil = 0;
   }
-
   for (const c of COLOR_ORDER)
     glowEls[c]?.classList.toggle('on', g.turn === c && !g.winner);
-
   if (g.winner) {
     if (!winSeen) showWin(g.winner);
     return;
@@ -1294,11 +1183,16 @@ function renderGame() {
   winOverlay.classList.remove('show');
   winSeen = false;
 
+  /* ✅ ویبره‌ی توجه: فقط وقتی نوبت تازه به من رسیده باشد */
+  if (g.turn === myColor && prevTurn !== myColor) {
+    if (vib) hapN('warning');
+  }
+  prevTurn = g.turn;
+
   turnDot.style.background = turnDot.style.color = COLORS[g.turn].main;
   statusText.innerHTML = (g.turn === myColor)
     ? t('turnYou', {name: `<b style="color:${COLORS[myColor].lite}">${esc(myName)}</b>`})
     : t('turnOther', {name: `<b style="color:${COLORS[g.turn].lite}">${esc(names[g.turn] || colorName(g.turn))}</b>`});
-
   if (g.turn === myColor) {
     if (g.dice == null) {
       if (diceLockUntil > Date.now()) {
@@ -1329,12 +1223,9 @@ function renderGame() {
     clearHighlight();
     hintEl.textContent = '';
   }
-
   diceEl.classList.toggle('myRoll', phase === 'my-roll');
   diceEl.classList.toggle('disabled', phase !== 'my-roll');
 }
-
-/* فقط برای هایلایت کلاینت — قاعده‌ی اصلی سمت سرور چک می‌شود */
 function computeLegal(color, d) {
   const moves = [];
   state.tokens[color].forEach((s, i) => {
@@ -1344,7 +1235,6 @@ function computeLegal(color, d) {
   });
   return moves;
 }
-
 function schedulePass(diceVal) {
   if (passDiceVal === diceVal) return;
   clearTimeout(passTimer);
@@ -1359,7 +1249,7 @@ function schedulePass(diceVal) {
   }, 1300);
 }
 
-/* ============ انداختن تاس (قرعه سمت سرور) ============ */
+/* ============ انداختن تاس ============ */
 diceEl.addEventListener('click', () => {
   if (phase !== 'my-roll') return;
   if (Date.now() < diceLockUntil) return;
@@ -1369,7 +1259,7 @@ diceEl.addEventListener('click', () => {
   hintEl.textContent = '';
   diceEl.classList.remove('myRoll');
   diceEl.classList.add('rolling', 'disabled');
-  playDiceSfx();
+  sfx.dice();
   let n = 0;
   const iv = setInterval(() => {
     setDice(1 + Math.floor(Math.random() * 6));
@@ -1392,7 +1282,7 @@ diceEl.addEventListener('click', () => {
   }, 85);
 });
 
-/* ============ حرکت مهره (اعتبارسنجی سمت سرور) ============ */
+/* ============ حرکت مهره ============ */
 async function onTokenClick(color, i) {
   if (color !== myColor || phase !== 'my-move') return;
   const mv = legal.find(m => m.i === i);
@@ -1427,14 +1317,14 @@ async function onTokenClick(color, i) {
   }
 }
 
-/* ============ AFK ============ */
+/* ============ AFK (بر اساس حضور واقعی) ============ */
 function afkCheck() {
   if (!room || !roomCode) return;
-  const last = room.lastAct || room.createdAt || Date.now();
-  const stale = Date.now() - last;
   afkBadge.style.display = 'none';
-
+  const now = Date.now() - srvOffset;
   if (!room.started) {
+    const last = room.lastAct || room.createdAt || now;
+    const stale = now - last;
     if (stale > LOBBY_CLOSE) return tryCloseRoom(t('lobbyClosedAfk'));
     if (stale > LOBBY_WARN)
       showAfk(t('lobbyAfk', {s: Math.ceil((LOBBY_CLOSE - stale) / 1000)}));
@@ -1442,7 +1332,10 @@ function afkCheck() {
   }
   const g = room.game;
   if (!g || g.winner) return;
-
+  const turnUid = Object.entries(room.players || {}).find(([,p]) => p.color === g.turn)?.[0];
+  const seenTs = turnUid != null ? (room.seen || {})[turnUid] : null;
+  const base = seenTs != null ? seenTs : Math.max(room.lastAct || 0, room.createdAt || 0);
+  const stale = now - base;
   if (stale > AFK_CLOSE) return tryCloseRoom(t('gameClosedAfk'));
   if (stale > AFK_WARN) {
     showAfk(t('gameAfk', {s: Math.ceil((AFK_CLOSE - stale) / 1000)}));
@@ -1461,13 +1354,6 @@ function showAfk(txt) {
   afkBadge.style.display = 'block';
 }
 function tryCloseRoom(msg) {
-  const canClose = !room.started
-    || room.host === myId
-    || (room.game && room.game.turn === myColor)
-    || !room.players[room.host];
-  if (canClose) {
-    /* اتاق را با خروج همه می‌بندیم — سرور خودش وقتی خالی شد حذفش می‌کند */
-  }
   leaveToMenu(msg);
 }
 
@@ -1520,7 +1406,7 @@ function confTick(ts) {
   else { confRun = false; cctx.clearRect(0, 0, cCanvas.width, cCanvas.height); }
 }
 function stopConfetti() { confRun = false; cctx.clearRect(0, 0, cCanvas.width, cCanvas.height); }
-
+/* دیالوگ برد: بدون موسیقی و بدون ویبره — فقط کانفتی */
 function showWin(color) {
   phase = 'over';
   winText.innerHTML =
@@ -1528,12 +1414,9 @@ function showWin(color) {
   againBtn.style.display = room.host === myId ? '' : 'none';
   winOverlay.classList.add('show');
   startConfetti();
-  playWinMusic();
-  hapN('success');
 }
 againBtn.addEventListener('click', async () => {
   hap('light'); sfx.click();
-  stopWinMusic();
   try {
     await req('POST', '/room/' + roomCode + '/start');
     winSeen = false;
@@ -1542,6 +1425,7 @@ againBtn.addEventListener('click', async () => {
     lastRoomSig = '';
     lastTokSig = '';
     diceLockUntil = 0;
+    prevTurn = null;
     pollNow();
   } catch (e) {}
 });
@@ -1557,6 +1441,7 @@ drawBoard();
 setDice(6);
 applyI18n();
 setVolIcon();
+setVibIcon();
 showScreen('menu');
 if (startParam) joinRoomByCode(startParam);
 </script>
